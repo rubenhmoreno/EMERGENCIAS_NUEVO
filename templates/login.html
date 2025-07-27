@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Sistema de Emergencias{% endblock %}
+
+{% block body %}
+<div class="login-screen">
+    <div class="login-container">
+        <img id="login-logo" class="login-logo" src="" alt="" style="display: none;">
+        <h1>🚨 Sistema de Emergencias</h1>
+        <h2>Villa Allende</h2>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">👤 Usuario</label>
+                <input type="text" id="username" class="form-control" required autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">🔒 Contraseña</label>
+                <input type="password" id="password" class="form-control" required autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;" id="login-btn">
+                <span id="login-text">Iniciar Sesión</span>
+                <span id="login-loading" class="loading" style="display: none;"></span>
+            </button>
+        </form>
+        
+        <div id="login-error" class="alert alert-error" style="margin-top: 1rem; display: none;"></div>
+        
+        <div style="margin-top: 2rem; font-size: 0.85rem; color: #7f8c8d;">
+            <strong>Credenciales por defecto:</strong><br>
+            <code>admin / 123456</code> (Administrador)
+        </div>
+        
+        <div style="margin-top: 1rem; font-size: 0.8rem; color: #95a5a6; text-align: center;">
+            <p>Sistema de Emergencias Villa Allende</p>
+            <p>Versión Python/SQLite</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar logo si existe
+    loadLogo();
+    
+    // Configurar formulario de login
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', handleLogin);
+    
+    // Focus automático en el campo usuario
+    document.getElementById('username').focus();
+});
+
+async function loadLogo() {
+    try {
+        const response = await fetch('/api/configuracion');
+        const data = await response.json();
+        
+        if (data.success && data.configuracion.logo_sistema) {
+            const loginLogo = document.getElementById('login-logo');
+            loginLogo.src = data.configuracion.logo_sistema;
+            loginLogo.style.display = 'block';
+        }
+    } catch (error) {
+        console.log('No se pudo cargar el logo');
+    }
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const loginBtn = document.getElementById('login-btn');
+    const loginText = document.getElementById('login-text');
+    const loginLoading = document.getElementById('login-loading');
+    const loginError = document.getElementById('login-error');
+    
+    // Mostrar loading
+    loginText.style.display = 'none';
+    loginLoading.style.display = 'inline-block';
+    loginBtn.disabled = true;
+    loginError.style.display = 'none';
+    
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Login exitoso
+            showAlert('¡Bienvenido al sistema!', 'success');
+            
+            // Esperar un momento antes de redirigir
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 1000);
+            
+        } else {
+            // Error de login
+            loginError.textContent = data.message || 'Usuario o contraseña incorrectos';
+            loginError.style.display = 'block';
+            
+            // Shake animation para el error
+            loginError.style.animation = 'none';
+            setTimeout(() => {
+                loginError.style.animation = 'shake 0.5s ease-in-out';
+            }, 10);
+        }
+        
+    } catch (error) {
+        console.error('Error en login:', error);
+        loginError.textContent = 'Error de conexión. Intente nuevamente.';
+        loginError.style.display = 'block';
+    } finally {
+        // Ocultar loading
+        loginText.style.display = 'inline-block';
+        loginLoading.style.display = 'none';
+        loginBtn.disabled = false;
+    }
+}
+
+// Manejar Enter en los campos
+document.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        const loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.dispatchEvent(new Event('submit'));
+        }
+    }
+});
+</script>
+
+<style>
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.login-container {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mejorar el aspecto visual del login */
+.form-control:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+}
+
+code {
+    background: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,522 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Sistema de Emergencias{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <!-- HEADER -->
+    <header class="header">
+        <h1>
+            <img id="header-logo" class="header-logo" src="" alt="" style="display: none;">
+            🚨 Sistema de Emergencias - Villa Allende
+        </h1>
+        <div class="user-info">
+            <div class="current-time" id="current-time"></div>
+            <span>👤 <span id="current-user">{{ current_user.nombre if current_user else 'Usuario' }}</span></span>
+            <span>🏢 <span id="current-role">{{ current_user.rol.upper() if current_user else 'ROL' }}</span></span>
+            <div class="whatsapp-status">
+                <div class="status-indicator" id="whatsapp-status-indicator"></div>
+                <span>WhatsApp: <span id="whatsapp-status-text">No verificado</span></span>
+            </div>
+            <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN -->
+    <nav class="nav-tabs">
+        <ul>
+            <li class="nav-tab">
+                <button onclick="showTab('dashboard')" class="tab-btn active" data-tab="dashboard">
+                    📊 Dashboard
+                </button>
+            </li>
+            <li class="nav-tab">
+                <button onclick="showTab('llamados')" class="tab-btn" data-tab="llamados">
+                    📞 Llamados
+                </button>
+            </li>
+            <li class="nav-tab">
+                <button onclick="showTab('consultas')" class="tab-btn" data-tab="consultas">
+                    🔍 Consultas
+                </button>
+            </li>
+            <li class="nav-tab">
+                <button onclick="showTab('personas')" class="tab-btn" data-tab="personas">
+                    👥 Personas
+                </button>
+            </li>
+            <li class="nav-tab">
+                <button onclick="showTab('guardias')" class="tab-btn" data-tab="guardias">
+                    📋 Guardias
+                </button>
+            </li>
+            {% if current_user and current_user.rol in ['admin', 'supervisor'] %}
+            <li class="nav-tab">
+                <button onclick="showTab('estadisticas')" class="tab-btn" data-tab="estadisticas">
+                    📈 Estadísticas
+                </button>
+            </li>
+            {% endif %}
+            {% if current_user and current_user.rol == 'admin' %}
+            <li class="nav-tab">
+                <button onclick="showTab('configuracion')" class="tab-btn" data-tab="configuracion">
+                    ⚙️ Configuración
+                </button>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="content">
+        <!-- TAB: DASHBOARD -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="section">
+                <h2>📊 Resumen del Sistema</h2>
+                
+                <!-- ESTADÍSTICAS RÁPIDAS -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="stat-llamados-total">{{ stats.total_llamados if stats else 0 }}</h3>
+                        <p>Total Llamados</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-llamados-hoy">{{ stats.llamados_hoy if stats else 0 }}</h3>
+                        <p>Llamados Hoy</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-personas-total">{{ stats.total_personas if stats else 0 }}</h3>
+                        <p>Personas en Base</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-usuarios-activos">{{ stats.usuarios_activos if stats else 0 }}</h3>
+                        <p>Usuarios Activos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-guardias-total">{{ stats.total_guardias if stats else 0 }}</h3>
+                        <p>Novedades Guardias</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="stat-whatsapp-count">0</h3>
+                        <p>Mensajes WhatsApp</p>
+                    </div>
+                </div>
+
+                <!-- ÚLTIMOS LLAMADOS -->
+                <h2>📞 Últimos Llamados</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha/Hora</th>
+                                <th>Tipo</th>
+                                <th>Prioridad</th>
+                                <th>Solicitante</th>
+                                <th>Operador</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-llamados-tbody">
+                            {% if ultimos_llamados %}
+                                {% for llamado in ultimos_llamados %}
+                                <tr>
+                                    <td>#{{ llamado.id }}</td>
+                                    <td>{{ llamado.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    <td>{{ llamado.tipo.upper() }}</td>
+                                    <td>
+                                        {% if llamado.prioridad == 'rojo' %}
+                                            <span class="badge badge-danger">🔴 ROJO</span>
+                                        {% elif llamado.prioridad == 'amarillo' %}
+                                            <span class="badge badge-warning">🟡 AMARILLO</span>
+                                        {% else %}
+                                            <span class="badge badge-success">🟢 VERDE</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ llamado.nombre }} {{ llamado.apellido }}</td>
+                                    <td>{{ llamado.usuario.nombre if llamado.usuario else 'Desconocido' }}</td>
+                                    <td>
+                                        {% if llamado.estado == 'en_curso' %}
+                                            <span class="badge badge-warning">🔄 En Curso</span>
+                                        {% else %}
+                                            <span class="badge badge-success">✅ Cerrado</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button onclick="verLlamado({{ llamado.id }})" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">👁️ Ver</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="8" style="text-align: center; color: #666;">No hay llamados registrados</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ACCESOS RÁPIDOS -->
+                <div class="section" style="margin-top: 2rem;">
+                    <h2>🚀 Accesos Rápidos</h2>
+                    <div class="btn-group" style="justify-content: center;">
+                        <button onclick="showTab('llamados')" class="btn btn-primary">📞 Nuevo Llamado</button>
+                        <button onclick="showTab('personas')" class="btn btn-success">👥 Nueva Persona</button>
+                        <button onclick="showTab('guardias')" class="btn btn-info">📋 Nueva Guardia</button>
+                        <button onclick="showTab('consultas')" class="btn btn-warning">🔍 Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OTROS TABS (se cargarán dinámicamente) -->
+        <div id="tab-llamados" class="tab-content">
+            <div class="section">
+                <h2>📞 Gestión de Llamados</h2>
+                <div id="llamados-content">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading"></div> Cargando...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-consultas" class="tab-content">
+            <div class="section">
+                <h2>🔍 Consultas y Búsquedas</h2>
+                <div id="consultas-content">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading"></div> Cargando...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-personas" class="tab-content">
+            <div class="section">
+                <h2>👥 Gestión de Personas</h2>
+                <div id="personas-content">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading"></div> Cargando...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-guardias" class="tab-content">
+            <div class="section">
+                <h2>📋 Libro de Guardias</h2>
+                <div id="guardias-content">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading"></div> Cargando...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if current_user and current_user.rol in ['admin', 'supervisor'] %}
+        <div id="tab-estadisticas" class="tab-content">
+            <div class="section">
+                <h2>📈 Estadísticas y Reportes</h2>
+                <div id="estadisticas-content">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading"></div> Cargando...
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if current_user and current_user.rol == 'admin' %}
+        <div id="tab-configuracion" class="tab-content">
+            <div class="section">
+                <h2>⚙️ Configuración del Sistema</h2>
+                <div id="configuracion-content">
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading"></div> Cargando...
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+</div>
+
+<!-- BOTÓN FLOTANTE -->
+<button class="fab" onclick="showTab('llamados')" title="Nuevo Llamado">
+    ➕
+</button>
+
+<!-- MODALES -->
+<div id="modal-llamado-detalle" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📞 Detalles del Llamado</h2>
+            <button class="modal-close" onclick="hideModal('modal-llamado-detalle')">❌</button>
+        </div>
+        <div id="llamado-detalle-content">
+            <!-- Se cargará dinámicamente -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// =============== VARIABLES GLOBALES ===============
+let currentTab = 'dashboard';
+let tabContents = {};
+
+// =============== FUNCIONES DE NAVEGACIÓN ===============
+async function showTab(tabName) {
+    // Verificar permisos
+    if (tabName === 'configuracion' && !['admin'].includes('{{ current_user.rol if current_user else "" }}')) {
+        showAlert('Solo los administradores pueden acceder a esta sección', 'error');
+        return;
+    }
+    
+    if (tabName === 'estadisticas' && !['admin', 'supervisor'].includes('{{ current_user.rol if current_user else "" }}')) {
+        showAlert('Solo administradores y supervisores pueden acceder a estadísticas', 'error');
+        return;
+    }
+    
+    // Ocultar todos los tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Desactivar todos los botones
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Mostrar tab seleccionado
+    const selectedTab = document.getElementById(`tab-${tabName}`);
+    if (selectedTab) {
+        selectedTab.classList.add('active');
+    }
+    
+    // Activar botón seleccionado
+    const selectedBtn = document.querySelector(`[data-tab="${tabName}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+    }
+    
+    currentTab = tabName;
+    
+    // Cargar contenido si es necesario
+    await loadTabContent(tabName);
+}
+
+async function loadTabContent(tabName) {
+    if (tabName === 'dashboard') {
+        await refreshDashboard();
+        return;
+    }
+    
+    // Si ya está cargado, no volver a cargar
+    if (tabContents[tabName]) {
+        return;
+    }
+    
+    const contentElement = document.getElementById(`${tabName}-content`);
+    if (!contentElement) return;
+    
+    try {
+        let url = '';
+        switch(tabName) {
+            case 'llamados':
+                url = '/llamados';
+                break;
+            case 'consultas':
+                url = '/consultas';
+                break;
+            case 'personas':
+                url = '/personas';
+                break;
+            case 'guardias':
+                url = '/guardias';
+                break;
+            case 'configuracion':
+                url = '/configuracion';
+                break;
+            default:
+                return;
+        }
+        
+        const response = await fetch(url);
+        const html = await response.text();
+        
+        // Extraer solo el contenido del body
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const content = doc.querySelector('.content') || doc.body;
+        
+        contentElement.innerHTML = content.innerHTML;
+        tabContents[tabName] = true;
+        
+    } catch (error) {
+        console.error(`Error cargando ${tabName}:`, error);
+        contentElement.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: #e74c3c;">
+                <p>❌ Error cargando contenido</p>
+                <button onclick="loadTabContent('${tabName}')" class="btn btn-secondary">🔄 Reintentar</button>
+            </div>
+        `;
+    }
+}
+
+// =============== FUNCIONES DEL DASHBOARD ===============
+async function refreshDashboard() {
+    try {
+        // Actualizar estadísticas
+        const response = await fetch('/api/llamados');
+        const data = await response.json();
+        
+        if (data.success) {
+            // Aquí puedes actualizar las estadísticas dinámicamente
+            await loadUltimosLlamados();
+        }
+    } catch (error) {
+        console.error('Error refrescando dashboard:', error);
+    }
+}
+
+async function loadUltimosLlamados() {
+    try {
+        const response = await fetch('/api/llamados?limit=10');
+        const data = await response.json();
+        
+        if (data.success) {
+            const tbody = document.getElementById('dashboard-llamados-tbody');
+            if (tbody) {
+                tbody.innerHTML = data.llamados.map(llamado => `
+                    <tr>
+                        <td>#${llamado.id}</td>
+                        <td>${formatDateTime(llamado.fecha)}</td>
+                        <td>${llamado.tipo.toUpperCase()}</td>
+                        <td>${getPriorityBadge(llamado.prioridad)}</td>
+                        <td>${llamado.nombre} ${llamado.apellido}</td>
+                        <td>${llamado.usuario_nombre || 'Desconocido'}</td>
+                        <td>${getEstadoBadge(llamado.estado)}</td>
+                        <td>
+                            <button onclick="verLlamado(${llamado.id})" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">👁️ Ver</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+    } catch (error) {
+        console.error('Error cargando últimos llamados:', error);
+    }
+}
+
+async function verLlamado(llamadoId) {
+    try {
+        const response = await fetch(`/api/llamados/${llamadoId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            const content = document.getElementById('llamado-detalle-content');
+            const llamado = data.llamado;
+            
+            content.innerHTML = `
+                <div class="llamada-info">
+                    <h3>📞 Llamado #${llamado.id}</h3>
+                    <div class="form-row">
+                        <div><strong>📅 Fecha:</strong> ${formatDateTime(llamado.fecha)}</div>
+                        <div><strong>🏷️ Tipo:</strong> ${llamado.tipo.toUpperCase()}</div>
+                        <div><strong>⚠️ Prioridad:</strong> ${getPriorityBadge(llamado.prioridad)}</div>
+                        <div><strong>📊 Estado:</strong> ${getEstadoBadge(llamado.estado)}</div>
+                    </div>
+                    
+                    <h4>👤 Solicitante</h4>
+                    <div class="form-row">
+                        <div><strong>Nombre:</strong> ${llamado.nombre} ${llamado.apellido}</div>
+                        <div><strong>Teléfono:</strong> ${llamado.telefono}</div>
+                        <div><strong>DNI:</strong> ${llamado.dni || 'No especificado'}</div>
+                    </div>
+                    
+                    <h4>📍 Ubicación</h4>
+                    <div><strong>Dirección:</strong> ${llamado.direccion_completa}</div>
+                    <div><strong>Tipo de ubicación:</strong> ${llamado.via_publica === 'via_publica' ? '🛣️ Vía Pública' : '🏠 Domicilio'}</div>
+                    ${llamado.entre_calles ? `<div><strong>Referencias:</strong> ${llamado.entre_calles}</div>` : ''}
+                    
+                    ${llamado.observaciones_iniciales ? `
+                    <h4>📝 Descripción Inicial</h4>
+                    <div>${llamado.observaciones_iniciales}</div>
+                    ` : ''}
+                    
+                    <div style="margin-top: 2rem;">
+                        <div class="btn-group">
+                            <button onclick="hideModal('modal-llamado-detalle')" class="btn btn-secondary">✅ Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showModal('modal-llamado-detalle');
+        }
+    } catch (error) {
+        console.error('Error cargando detalles del llamado:', error);
+        showAlert('Error cargando detalles del llamado', 'error');
+    }
+}
+
+// =============== INICIALIZACIÓN ===============
+document.addEventListener('DOMContentLoaded', async function() {
+    // Cargar logo del sistema
+    await loadSystemLogo();
+    
+    // Verificar estado WhatsApp
+    await checkWhatsAppStatus();
+    
+    // Actualizar dashboard cada 30 segundos
+    setInterval(refreshDashboard, 30000);
+});
+
+async function loadSystemLogo() {
+    try {
+        const response = await fetch('/api/configuracion');
+        const data = await response.json();
+        
+        if (data.success && data.configuracion.logo_sistema) {
+            const headerLogo = document.getElementById('header-logo');
+            if (headerLogo) {
+                headerLogo.src = data.configuracion.logo_sistema;
+                headerLogo.style.display = 'inline-block';
+            }
+        }
+    } catch (error) {
+        console.log('No se pudo cargar el logo del sistema');
+    }
+}
+
+async function checkWhatsAppStatus() {
+    try {
+        const response = await fetch('/api/configuracion');
+        const data = await response.json();
+        
+        const indicator = document.getElementById('whatsapp-status-indicator');
+        const text = document.getElementById('whatsapp-status-text');
+        
+        if (data.success) {
+            const token = data.configuracion.whatsapp_token;
+            const uid = data.configuracion.whatsapp_uid;
+            
+            if (token && uid) {
+                indicator.className = 'status-indicator status-connected';
+                text.textContent = 'Configurado';
+            } else {
+                indicator.className = 'status-indicator status-disconnected';
+                text.textContent = 'No configurado';
+            }
+        }
+    } catch (error) {
+        console.log('Error verificando estado WhatsApp');
+    }
+}
+</script>
+{% endblock %}

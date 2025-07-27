@@ -1,0 +1,368 @@
+# ===========================================
+# requirements.txt - Dependencias Python
+# ===========================================
+
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+Werkzeug==3.0.1
+requests==2.31.0
+cryptography==41.0.7
+pywin32==306
+psutil==5.9.6
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+itsdangerous==2.1.2
+click==8.1.7
+blinker==1.7.0
+SQLAlchemy==2.0.23
+typing_extensions==4.8.0
+cffi==1.16.0
+pycparser==2.21
+
+# ===========================================
+# config.ini - Configuración Principal
+# ===========================================
+
+[DATABASE]
+# Configuración de base de datos
+path = data/emergency_system.db
+encryption_enabled = true
+backup_interval_hours = 24
+max_backup_files = 30
+
+[SERVER]
+# Configuración del servidor web
+host = 0.0.0.0
+port = 5000
+debug = false
+ssl_enabled = true
+ssl_cert_file = ssl/server.crt
+ssl_key_file = ssl/server.key
+
+[SECURITY]
+# Configuración de seguridad
+secret_key = emergency-system-villa-allende-2024-secure-v2
+session_timeout_minutes = 60
+max_login_attempts = 5
+lockout_duration_minutes = 30
+password_min_length = 6
+
+[LOGGING]
+# Configuración de logging
+level = INFO
+file = logs/app.log
+max_size_mb = 10
+backup_count = 5
+format = %(asctime)s - %(name)s - %(levelname)s - %(message)s
+
+[WHATSAPP]
+# Configuración de WhatsApp (configurar desde el panel web)
+api_url = https://www.waboxapp.com/api/send/chat
+token = 
+uid = 
+timeout_seconds = 30
+
+[EMERGENCY]
+# Configuración específica de emergencias
+default_priority = verde
+auto_whatsapp = true
+protocol_107_enabled = true
+triage_required_medical = true
+
+[SYSTEM]
+# Configuración del sistema
+version = 2.0.0
+install_date = 
+admin_email = admin@villaallende.gov.ar
+organization = Municipalidad de Villa Allende
+location = Villa Allende, Córdoba, Argentina
+
+# ===========================================
+# version.txt - Información de Versión
+# ===========================================
+
+2.0.0
+Build: 20240127
+Sistema de Emergencias Villa Allende
+Versión con base de datos corregida
+Campo email agregado en tabla personas
+Migración automática implementada
+Instalador NSIS completo
+
+# ===========================================
+# install.bat - Instalador Windows
+# ===========================================
+
+@echo off
+chcp 65001 >nul
+setlocal enabledelayedexpansion
+
+echo ================================================
+echo 🚨 SISTEMA DE EMERGENCIAS VILLA ALLENDE v2.0
+echo    Instalador Automático Windows
+echo ================================================
+echo.
+
+:: Verificar permisos de administrador
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ❌ Este instalador requiere permisos de administrador.
+    echo    Ejecute como administrador y vuelva a intentar.
+    pause
+    exit /b 1
+)
+
+echo ✅ Permisos de administrador verificados
+echo.
+
+:: Verificar Python
+echo 🐍 Verificando Python...
+python --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ❌ Python no encontrado en el sistema.
+    echo    Instale Python 3.8+ desde https://python.org
+    echo    Asegúrese de marcar "Add Python to PATH"
+    pause
+    exit /b 1
+)
+
+for /f "tokens=2" %%i in ('python --version 2^>^&1') do set PYTHON_VERSION=%%i
+echo ✅ Python %PYTHON_VERSION% encontrado
+echo.
+
+:: Crear directorios
+echo 📁 Creando estructura de directorios...
+if not exist "static\uploads" mkdir "static\uploads"
+if not exist "backups" mkdir "backups"
+if not exist "logs" mkdir "logs"
+if not exist "data" mkdir "data"
+if not exist "ssl" mkdir "ssl"
+echo ✅ Directorios creados
+echo.
+
+:: Verificar archivos requeridos
+echo 📋 Verificando archivos del sistema...
+set MISSING_FILES=0
+
+set FILES=app.py models.py run.py migrate_database.py
+for %%f in (%FILES%) do (
+    if not exist "%%f" (
+        echo ❌ Archivo faltante: %%f
+        set MISSING_FILES=1
+    )
+)
+
+if %MISSING_FILES% equ 1 (
+    echo ❌ Archivos requeridos faltantes.
+    echo    Asegúrese de tener todos los archivos del sistema.
+    pause
+    exit /b 1
+)
+
+echo ✅ Todos los archivos requeridos presentes
+echo.
+
+:: Instalar dependencias
+echo 📦 Instalando dependencias Python...
+echo    Esto puede tomar varios minutos...
+python -m pip install --upgrade pip >nul 2>&1
+python -m pip install -r requirements.txt
+if %errorlevel% neq 0 (
+    echo ❌ Error instalando dependencias.
+    echo    Verifique su conexión a internet.
+    pause
+    exit /b 1
+)
+
+echo ✅ Dependencias instaladas correctamente
+echo.
+
+:: Migrar base de datos
+echo 🗄️ Configurando base de datos...
+python migrate_database.py
+if %errorlevel% neq 0 (
+    echo ❌ Error configurando base de datos.
+    pause
+    exit /b 1
+)
+
+echo ✅ Base de datos configurada
+echo.
+
+:: Inicializar aplicación
+echo 🚀 Inicializando aplicación...
+python -c "import sys; sys.path.append('.'); from app import app, init_database; app.app_context().push(); init_database(); print('Aplicación inicializada')"
+if %errorlevel% neq 0 (
+    echo ❌ Error inicializando aplicación.
+    pause
+    exit /b 1
+)
+
+echo ✅ Aplicación inicializada
+echo.
+
+:: Configurar firewall
+echo 🔥 Configurando firewall...
+netsh advfirewall firewall add rule name="EmergencySystemVA-HTTP" dir=in action=allow protocol=TCP localport=5000 >nul 2>&1
+if %errorlevel% equ 0 (
+    echo ✅ Regla de firewall agregada
+) else (
+    echo ⚠️ No se pudo configurar firewall automáticamente
+)
+echo.
+
+:: Instalar servicio Windows (opcional)
+echo 🔧 ¿Desea instalar como servicio Windows? (S/N):
+set /p INSTALL_SERVICE=
+if /i "%INSTALL_SERVICE%"=="S" (
+    echo    Instalando servicio...
+    if exist "service\emergency_service.py" (
+        python service\emergency_service.py install
+        if %errorlevel% equ 0 (
+            echo ✅ Servicio instalado correctamente
+            python service\emergency_service.py start
+            if %errorlevel% equ 0 (
+                echo ✅ Servicio iniciado
+            )
+        ) else (
+            echo ⚠️ Error instalando servicio
+        )
+    ) else (
+        echo ⚠️ Archivo de servicio no encontrado
+    )
+)
+echo.
+
+:: Crear accesos directos
+echo 🔗 Creando accesos directos...
+
+:: Escritorio
+echo @echo off > "%USERPROFILE%\Desktop\Emergencia VA.bat"
+echo cd /d "%CD%" >> "%USERPROFILE%\Desktop\Emergencia VA.bat"
+echo start http://localhost:5000 >> "%USERPROFILE%\Desktop\Emergencia VA.bat"
+
+:: Script de inicio
+echo @echo off > start.bat
+echo chcp 65001 ^>nul >> start.bat
+echo echo ============================================ >> start.bat
+echo echo 🚨 SISTEMA DE EMERGENCIAS VILLA ALLENDE >> start.bat
+echo echo ============================================ >> start.bat
+echo cd /d "%CD%" >> start.bat
+echo python run.py >> start.bat
+echo pause >> start.bat
+
+echo ✅ Accesos directos creados
+echo.
+
+:: Crear documentación
+echo 📖 Creando documentación...
+echo ================================================ > INSTALACION_COMPLETADA.txt
+echo 🚨 SISTEMA DE EMERGENCIAS VILLA ALLENDE v2.0 >> INSTALACION_COMPLETADA.txt
+echo ================================================ >> INSTALACION_COMPLETADA.txt
+echo. >> INSTALACION_COMPLETADA.txt
+echo ✅ INSTALACIÓN COMPLETADA EXITOSAMENTE >> INSTALACION_COMPLETADA.txt
+echo. >> INSTALACION_COMPLETADA.txt
+echo 🌐 ACCESO AL SISTEMA: >> INSTALACION_COMPLETADA.txt
+echo    URL: http://localhost:5000 >> INSTALACION_COMPLETADA.txt
+echo    Usuario: admin >> INSTALACION_COMPLETADA.txt
+echo    Contraseña: 123456 >> INSTALACION_COMPLETADA.txt
+echo. >> INSTALACION_COMPLETADA.txt
+echo 🚀 CÓMO INICIAR: >> INSTALACION_COMPLETADA.txt
+echo    - Doble clic en start.bat >> INSTALACION_COMPLETADA.txt
+echo    - O usar servicio Windows si fue instalado >> INSTALACION_COMPLETADA.txt
+echo. >> INSTALACION_COMPLETADA.txt
+echo 📋 NOVEDADES v2.0: >> INSTALACION_COMPLETADA.txt
+echo    ✅ Campo email agregado en personas >> INSTALACION_COMPLETADA.txt
+echo    ✅ Migración automática de base de datos >> INSTALACION_COMPLETADA.txt
+echo    ✅ Sistema de backup mejorado >> INSTALACION_COMPLETADA.txt
+echo    ✅ Herramientas de diagnóstico >> INSTALACION_COMPLETADA.txt
+echo    ✅ Instalador automático completo >> INSTALACION_COMPLETADA.txt
+echo. >> INSTALACION_COMPLETADA.txt
+echo 🛠️ HERRAMIENTAS: >> INSTALACION_COMPLETADA.txt
+echo    - Diagnóstico: python tools\diagnostics.py >> INSTALACION_COMPLETADA.txt
+echo    - Backup: python utils\backup.py create >> INSTALACION_COMPLETADA.txt
+echo    - Migración: python migrate_database.py >> INSTALACION_COMPLETADA.txt
+echo. >> INSTALACION_COMPLETADA.txt
+echo 📧 SOPORTE: Consulte la documentación completa >> INSTALACION_COMPLETADA.txt
+echo. >> INSTALACION_COMPLETADA.txt
+echo Fecha de instalación: %DATE% %TIME% >> INSTALACION_COMPLETADA.txt
+
+echo ✅ Documentación creada
+echo.
+
+:: Resumen final
+echo ================================================
+echo 🎉 INSTALACIÓN COMPLETADA EXITOSAMENTE
+echo ================================================
+echo.
+echo 🌐 URL de acceso: http://localhost:5000
+echo 👤 Usuario: admin
+echo 🔑 Contraseña: 123456
+echo.
+echo 🚀 Para iniciar el sistema:
+if /i "%INSTALL_SERVICE%"=="S" (
+    echo    El servicio ya está ejecutándose
+    echo    El sistema debería estar disponible ahora
+) else (
+    echo    Ejecute: start.bat
+)
+echo.
+echo 📋 Cambios importantes en v2.0:
+echo    ✅ Campo email agregado en tabla personas
+echo    ✅ Migración automática implementada
+echo    ✅ Herramientas de diagnóstico incluidas
+echo    ✅ Sistema de backup mejorado
+echo.
+echo 📖 Consulte INSTALACION_COMPLETADA.txt para más detalles
+echo.
+echo ¡SISTEMA LISTO PARA GESTIONAR EMERGENCIAS! 🚨
+echo ================================================
+
+pause
+
+# ===========================================
+# start.bat - Script de Inicio
+# ===========================================
+
+@echo off
+chcp 65001 >nul
+title Sistema de Emergencias Villa Allende
+
+echo ============================================
+echo 🚨 SISTEMA DE EMERGENCIAS VILLA ALLENDE
+echo    Versión 2.0 - Villa Allende, Córdoba
+echo ============================================
+echo.
+
+:: Verificar Python
+python --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo ❌ Python no encontrado.
+    echo    Instale Python o verifique la instalación.
+    pause
+    exit /b 1
+)
+
+:: Cambiar al directorio del script
+cd /d "%~dp0"
+
+echo 🐍 Python OK
+echo 📁 Directorio: %CD%
+echo 🕒 Iniciando aplicación...
+echo.
+echo 🌐 Una vez iniciado, acceda a: http://localhost:5000
+echo 👤 Usuario por defecto: admin
+echo 🔑 Contraseña por defecto: 123456
+echo.
+echo ⚠️  IMPORTANTE: Cambie la contraseña después del primer acceso
+echo 🛑 Presione Ctrl+C para detener el sistema
+echo.
+echo ============================================
+
+:: Ejecutar aplicación
+python run.py
+
+echo.
+echo 👋 Sistema detenido
+pause

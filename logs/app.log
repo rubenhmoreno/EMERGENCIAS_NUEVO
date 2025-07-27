@@ -1,0 +1,142 @@
+2025-07-27 20:23:54,649 - root - INFO - ============================================================
+2025-07-27 20:23:54,685 - root - INFO - ============================================================
+2025-07-27 20:23:57,898 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.221:5000
+2025-07-27 20:23:57,898 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-27 20:24:09,823 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:09] "GET / HTTP/1.1" 200 -
+2025-07-27 20:24:09,898 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:09] "[32mGET /api/configuracion HTTP/1.1[0m" 302 -
+2025-07-27 20:24:09,951 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:09] "GET /login?next=/api/configuracion HTTP/1.1" 200 -
+2025-07-27 20:24:14,309 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:14] "POST /login HTTP/1.1" 200 -
+2025-07-27 20:24:15,386 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:15] "GET /dashboard HTTP/1.1" 200 -
+2025-07-27 20:24:15,418 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:15] "GET /api/configuracion HTTP/1.1" 200 -
+2025-07-27 20:24:15,514 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:15] "GET /api/configuracion HTTP/1.1" 200 -
+2025-07-27 20:24:22,517 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:22] "GET /configuracion HTTP/1.1" 200 -
+2025-07-27 20:24:45,541 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:45] "GET /api/llamados HTTP/1.1" 200 -
+2025-07-27 20:24:45,548 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:24:45] "GET /api/llamados?limit=10 HTTP/1.1" 200 -
+2025-07-27 20:25:15,540 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:15] "GET /api/llamados HTTP/1.1" 200 -
+2025-07-27 20:25:15,547 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:15] "GET /api/llamados?limit=10 HTTP/1.1" 200 -
+2025-07-27 20:25:28,517 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:28] "GET /dashboard HTTP/1.1" 200 -
+2025-07-27 20:25:28,552 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:28] "GET /api/configuracion HTTP/1.1" 200 -
+2025-07-27 20:25:28,569 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:28] "GET /api/configuracion HTTP/1.1" 200 -
+2025-07-27 20:25:30,485 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:30] "GET /dashboard HTTP/1.1" 200 -
+2025-07-27 20:25:30,515 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:30] "GET /api/configuracion HTTP/1.1" 200 -
+2025-07-27 20:25:30,533 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:30] "GET /api/configuracion HTTP/1.1" 200 -
+2025-07-27 20:25:32,604 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:32] "GET /llamados HTTP/1.1" 200 -
+2025-07-27 20:25:43,318 - app - ERROR - Exception on /consultas [GET]
+Traceback (most recent call last):
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\SISTEMA DE EMERGENCIAS\sistema web\Sistema v 1.1\app.py", line 237, in consultas
+    return render_template('consultas.html')
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 151, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 65, in get_source
+    return self._get_source_fast(environment, template)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 99, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: consultas.html
+2025-07-27 20:25:43,394 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:43] "[35m[1mGET /consultas HTTP/1.1[0m" 500 -
+2025-07-27 20:25:43,813 - app - ERROR - Exception on /personas [GET]
+Traceback (most recent call last):
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\SISTEMA DE EMERGENCIAS\sistema web\Sistema v 1.1\app.py", line 242, in personas
+    return render_template('personas.html')
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 151, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 65, in get_source
+    return self._get_source_fast(environment, template)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 99, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: personas.html
+2025-07-27 20:25:43,816 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:43] "[35m[1mGET /personas HTTP/1.1[0m" 500 -
+2025-07-27 20:25:47,289 - app - ERROR - Exception on /guardias [GET]
+Traceback (most recent call last):
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\SISTEMA DE EMERGENCIAS\sistema web\Sistema v 1.1\app.py", line 247, in guardias
+    return render_template('guardias.html')
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 151, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 65, in get_source
+    return self._get_source_fast(environment, template)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Local\Programs\Python\Python313\Lib\site-packages\flask\templating.py", line 99, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: guardias.html
+2025-07-27 20:25:47,291 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:47] "[35m[1mGET /guardias HTTP/1.1[0m" 500 -
+2025-07-27 20:25:52,678 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:52] "GET /api/llamados HTTP/1.1" 200 -
+2025-07-27 20:25:52,688 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:25:52] "GET /api/llamados?limit=10 HTTP/1.1" 200 -
+2025-07-27 20:26:01,419 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:26:01] "GET /api/llamados HTTP/1.1" 200 -
+2025-07-27 20:26:01,427 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:26:01] "GET /api/llamados?limit=10 HTTP/1.1" 200 -
+2025-07-27 20:26:31,434 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:26:31] "GET /api/llamados HTTP/1.1" 200 -
+2025-07-27 20:26:31,443 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:26:31] "GET /api/llamados?limit=10 HTTP/1.1" 200 -
+2025-07-27 20:27:01,432 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:27:01] "GET /api/llamados HTTP/1.1" 200 -
+2025-07-27 20:27:01,439 - werkzeug - INFO - 127.0.0.1 - - [27/Jul/2025 20:27:01] "GET /api/llamados?limit=10 HTTP/1.1" 200 -

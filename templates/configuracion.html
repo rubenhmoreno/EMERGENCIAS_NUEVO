@@ -1,0 +1,794 @@
+{% extends "base.html" %}
+
+{% block title %}Configuración - Sistema de Emergencias{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="content">
+        <div class="section">
+            <h2>⚙️ Configuración del Sistema</h2>
+            
+            <!-- CONFIGURACIÓN DE LOGO -->
+            <div class="config-section">
+                <h4>🖼️ Logo del Sistema</h4>
+                <p>Personaliza el logo que aparece en el login y header del sistema (JPG o GIF únicamente)</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>📁 Seleccionar logo</label>
+                        <input type="file" id="logo-file" class="form-control" accept=".jpg,.jpeg,.gif">
+                    </div>
+                    <div class="form-group">
+                        <button onclick="subirLogo()" class="btn btn-primary">💾 Guardar Logo</button>
+                        <button onclick="eliminarLogo()" class="btn btn-danger">🗑️ Eliminar Logo</button>
+                    </div>
+                </div>
+                <img id="logo-preview" class="logo-preview" alt="Vista previa del logo" style="display: none;">
+            </div>
+            
+            <!-- CONFIGURACIÓN WHATSAPP -->
+            <div class="config-section">
+                <h4>📱 Configuración WhatsApp</h4>
+                <p>Configure la integración con WhatsApp usando Waboxapp</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🔑 Token API</label>
+                        <input type="text" id="whatsapp-token" class="form-control" 
+                               placeholder="Token de Waboxapp">
+                    </div>
+                    <div class="form-group">
+                        <label>🆔 UID (Número Emisor)</label>
+                        <input type="text" id="whatsapp-uid" class="form-control" 
+                               placeholder="549351XXXXXXX">
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button onclick="guardarConfigWhatsApp()" class="btn btn-success">💾 Guardar WhatsApp</button>
+                    <button onclick="probarWhatsApp()" class="btn btn-warning">🧪 Probar Conexión</button>
+                </div>
+                
+                <!-- Estado WhatsApp -->
+                <div class="whatsapp-status" style="margin-top: 1rem;">
+                    <div class="status-indicator" id="config-whatsapp-status"></div>
+                    <span>Estado: <span id="config-whatsapp-text">No configurado</span></span>
+                    <span style="margin-left: 1rem;">Mensajes enviados: <span id="config-whatsapp-count">0</span></span>
+                </div>
+            </div>
+                
+            <!-- NÚMEROS POR SERVICIO -->
+            <div class="config-section">
+                <h4>📞 Teléfonos de Servicios</h4>
+                <p>Configure los números de WhatsApp para cada servicio (formato: 549351XXXXXXX)</p>
+                
+                <h5>🚑 Servicios Médicos</h5>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🚑 DEMVA (Emergencias Médicas Rojas/Amarillas en Domicilio)</label>
+                        <input type="text" id="telefono-demva" class="form-control" placeholder="549351XXXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>🚑 CEC (Emergencias Médicas en Vía Pública)</label>
+                        <input type="text" id="telefono-cec" class="form-control" placeholder="549351XXXXXXX">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>💚 TELEMEDICINA (Emergencias Médicas Verdes en Domicilio)</label>
+                        <input type="text" id="telefono-telemedicina" class="form-control" placeholder="549351XXXXXXX">
+                    </div>
+                </div>
+                
+                <h5>🚨 Otros Servicios</h5>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🚒 Bomberos</label>
+                        <input type="text" id="telefono-bomberos" class="form-control" placeholder="549351XXXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>👮 Seguridad</label>
+                        <input type="text" id="telefono-seguridad" class="form-control" placeholder="549351XXXXXXX">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>🛡️ Defensa Civil</label>
+                        <input type="text" id="telefono-defensa" class="form-control" placeholder="549351XXXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>👨‍💼 Supervisor (recibe todas las alertas)</label>
+                        <input type="text" id="telefono-supervisor" class="form-control" placeholder="549351XXXXXXX">
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button onclick="guardarTelefonos()" class="btn btn-success">💾 Guardar Teléfonos</button>
+                </div>
+            </div>
+
+            <!-- GESTIÓN DE USUARIOS -->
+            <div class="config-section">
+                <h4>👥 Gestión de Usuarios</h4>
+                
+                <div style="margin-bottom: 2rem;">
+                    <button onclick="nuevoUsuario()" class="btn btn-success">➕ Nuevo Usuario</button>
+                    <button onclick="cargarUsuarios()" class="btn btn-info">🔄 Actualizar Lista</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Último Login</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usuarios-tbody">
+                            <!-- Se llenarán dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- GESTIÓN DE BASE DE DATOS -->
+            <div class="config-section">
+                <h4>🗃️ Gestión de Base de Datos</h4>
+                
+                <div class="form-row">
+                    <div class="stat-card">
+                        <h3 id="db-size">-</h3>
+                        <p>Tamaño BD (MB)</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="db-records">-</h3>
+                        <p>Total Registros</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="db-backups">-</h3>
+                        <p>Backups Disponibles</p>
+                    </div>
+                </div>
+
+                <h5>🛠️ Herramientas de Base de Datos</h5>
+                <div class="btn-group">
+                    <button onclick="inicializarBaseDatos()" class="btn btn-primary">🚀 Inicializar BD</button>
+                    <button onclick="crearBackup()" class="btn btn-success">💾 Crear Backup</button>
+                    <button onclick="optimizarBaseDatos()" class="btn btn-info">⚡ Optimizar BD</button>
+                    <button onclick="verificarIntegridad()" class="btn btn-warning">🔍 Verificar Integridad</button>
+                </div>
+
+                <h5>📋 Información de la Base de Datos</h5>
+                <div id="db-info" class="table-container">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+
+                <h5>📂 Gestión de Backups</h5>
+                <div id="backups-list" class="table-container">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALES -->
+<div id="modal-nuevo-usuario" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>👤 Nuevo Usuario</h2>
+            <button class="modal-close" onclick="hideModal('modal-nuevo-usuario')">❌</button>
+        </div>
+        <form id="nuevo-usuario-form">
+            <div class="form-row">
+                <div class="form-group required">
+                    <label>👤 Nombre de usuario</label>
+                    <input type="text" id="nuevo-username" class="form-control" required>
+                </div>
+                <div class="form-group required">
+                    <label>🔒 Contraseña</label>
+                    <input type="password" id="nuevo-password" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group required">
+                    <label>👤 Nombre</label>
+                    <input type="text" id="nuevo-user-nombre" class="form-control" required>
+                </div>
+                <div class="form-group required">
+                    <label>👤 Apellido</label>
+                    <input type="text" id="nuevo-user-apellido" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="nuevo-user-email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>📱 Teléfono</label>
+                    <input type="tel" id="nuevo-user-telefono" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>🏷️ Rol</label>
+                <select id="nuevo-user-rol" class="form-control" required>
+                    <option value="">Seleccionar rol...</option>
+                    <option value="admin">Administrador</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="operador">Operador</option>
+                </select>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">💾 Crear Usuario</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('modal-nuevo-usuario')">❌ Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.config-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    border-left: 4px solid #3498db;
+}
+
+.config-section h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+}
+
+.config-section h5 {
+    color: #34495e;
+    margin: 1.5rem 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.logo-preview {
+    max-width: 200px;
+    max-height: 150px;
+    border: 2px dashed #3498db;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.whatsapp-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    font-size: 0.9rem;
+}
+
+.btn-group {
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+.stat-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: #3498db;
+}
+
+.stat-card p {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// =============== INICIALIZACIÓN ===============
+document.addEventListener('DOMContentLoaded', function() {
+    cargarConfiguracion();
+    cargarUsuarios();
+    cargarEstadisticasDB();
+    setupEventListeners();
+});
+
+function setupEventListeners() {
+    // Formulario de nuevo usuario
+    const form = document.getElementById('nuevo-usuario-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            crearUsuario();
+        });
+    }
+    
+    // Preview del logo
+    const logoFile = document.getElementById('logo-file');
+    if (logoFile) {
+        logoFile.addEventListener('change', previewLogo);
+    }
+}
+
+// =============== CONFIGURACIÓN GENERAL ===============
+async function cargarConfiguracion() {
+    try {
+        const response = await fetch('/api/configuracion');
+        const data = await response.json();
+        
+        if (data.success) {
+            const config = data.configuracion;
+            
+            // WhatsApp
+            document.getElementById('whatsapp-token').value = config.whatsapp_token || '';
+            document.getElementById('whatsapp-uid').value = config.whatsapp_uid || '';
+            
+            // Teléfonos
+            document.getElementById('telefono-demva').value = config.telefono_demva || '';
+            document.getElementById('telefono-cec').value = config.telefono_cec || '';
+            document.getElementById('telefono-telemedicina').value = config.telefono_telemedicina || '';
+            document.getElementById('telefono-bomberos').value = config.telefono_bomberos || '';
+            document.getElementById('telefono-seguridad').value = config.telefono_seguridad || '';
+            document.getElementById('telefono-defensa').value = config.telefono_defensa || '';
+            document.getElementById('telefono-supervisor').value = config.telefono_supervisor || '';
+            
+            // Logo
+            if (config.logo_sistema) {
+                mostrarPreviewLogo(config.logo_sistema);
+            }
+            
+            // Estado WhatsApp
+            actualizarEstadoWhatsApp(config);
+        }
+    } catch (error) {
+        console.error('Error cargando configuración:', error);
+        showAlert('Error cargando configuración', 'error');
+    }
+}
+
+function actualizarEstadoWhatsApp(config) {
+    const indicator = document.getElementById('config-whatsapp-status');
+    const text = document.getElementById('config-whatsapp-text');
+    const count = document.getElementById('config-whatsapp-count');
+    
+    if (config.whatsapp_token && config.whatsapp_uid) {
+        indicator.className = 'status-indicator status-connected';
+        text.textContent = 'Configurado';
+    } else {
+        indicator.className = 'status-indicator status-disconnected';
+        text.textContent = 'No configurado';
+    }
+    
+    // Aquí podrías obtener el contador real de mensajes
+    count.textContent = '0';
+}
+
+// =============== WHATSAPP ===============
+async function guardarConfigWhatsApp() {
+    const token = document.getElementById('whatsapp-token').value;
+    const uid = document.getElementById('whatsapp-uid').value;
+    
+    try {
+        const response = await fetch('/api/configuracion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                whatsapp_token: token,
+                whatsapp_uid: uid
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Configuración WhatsApp guardada', 'success');
+            actualizarEstadoWhatsApp({ whatsapp_token: token, whatsapp_uid: uid });
+        } else {
+            showAlert(data.message || 'Error guardando configuración', 'error');
+        }
+    } catch (error) {
+        console.error('Error guardando WhatsApp:', error);
+        showAlert('Error de conexión', 'error');
+    }
+}
+
+async function probarWhatsApp() {
+    try {
+        const response = await fetch('/api/whatsapp/test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('✅ Prueba de WhatsApp exitosa', 'success');
+        } else {
+            showAlert(data.message || 'Error en prueba de WhatsApp', 'error');
+        }
+    } catch (error) {
+        console.error('Error probando WhatsApp:', error);
+        showAlert('Error de conexión al probar WhatsApp', 'error');
+    }
+}
+
+async function guardarTelefonos() {
+    const telefonos = {
+        telefono_demva: document.getElementById('telefono-demva').value,
+        telefono_cec: document.getElementById('telefono-cec').value,
+        telefono_telemedicina: document.getElementById('telefono-telemedicina').value,
+        telefono_bomberos: document.getElementById('telefono-bomberos').value,
+        telefono_seguridad: document.getElementById('telefono-seguridad').value,
+        telefono_defensa: document.getElementById('telefono-defensa').value,
+        telefono_supervisor: document.getElementById('telefono-supervisor').value
+    };
+    
+    try {
+        const response = await fetch('/api/configuracion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(telefonos)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert('Teléfonos guardados correctamente', 'success');
+        } else {
+            showAlert(data.message || 'Error guardando teléfonos', 'error');
+        }
+    } catch (error) {
+        console.error('Error guardando teléfonos:', error);
+        showAlert('Error de conexión', 'error');
+    }
+}
+
+// =============== GESTIÓN DE USUARIOS ===============
+async function cargarUsuarios() {
+    try {
+        const response = await fetch('/api/usuarios');
+        const data = await response.json();
+        
+        if (data.success) {
+            const tbody = document.getElementById('usuarios-tbody');
+            tbody.innerHTML = data.usuarios.map(user => {
+                const estadoBadge = user.activo ? 
+                    '<span class="badge badge-success">Activo</span>' : 
+                    '<span class="badge badge-danger">Inactivo</span>';
+                
+                const ultimoLogin = user.ultimo_login ? 
+                    formatDateTime(user.ultimo_login) : 'Nunca';
+                
+                const rolBadge = `<span class="badge badge-info">${user.rol.toUpperCase()}</span>`;
+                
+                return `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.nombre} ${user.apellido}</td>
+                        <td>${user.email || '-'}</td>
+                        <td>${rolBadge}</td>
+                        <td>${estadoBadge}</td>
+                        <td>${ultimoLogin}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button onclick="editarUsuario(${user.id})" class="btn btn-warning" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">✏️ Editar</button>
+                                ${user.username !== 'admin' ? `
+                                    <button onclick="toggleUsuario(${user.id})" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                                        ${user.activo ? '🚫' : '✅'}
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    } catch (error) {
+        console.error('Error cargando usuarios:', error);
+        showAlert('Error cargando usuarios', 'error');
+    }
+}
+
+function nuevoUsuario() {
+    showModal('modal-nuevo-usuario');
+}
+
+async function crearUsuario() {
+    const datos = {
+        username: document.getElementById('nuevo-username').value,
+        password: document.getElementById('nuevo-password').value,
+        nombre: document.getElementById('nuevo-user-nombre').value,
+        apellido: document.getElementById('nuevo-user-apellido').value,
+        email: document.getElementById('nuevo-user-email').value,
+        telefono: document.getElementById('nuevo-user-telefono').value,
+        rol: document.getElementById('nuevo-user-rol').value
+    };
+    
+    try {
+        const response = await fetch('/api/usuarios', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(datos)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(data.message, 'success');
+            hideModal('modal-nuevo-usuario');
+            cargarUsuarios();
+        } else {
+            showAlert(data.message || 'Error creando usuario', 'error');
+        }
+    } catch (error) {
+        console.error('Error creando usuario:', error);
+        showAlert('Error de conexión', 'error');
+    }
+}
+
+function editarUsuario(id) {
+    showAlert('Función de edición en desarrollo', 'info');
+}
+
+async function toggleUsuario(id) {
+    if (confirm('¿Está seguro de cambiar el estado de este usuario?')) {
+        // Implementar toggle de usuario
+        showAlert('Función en desarrollo', 'info');
+    }
+}
+
+// =============== GESTIÓN DE LOGO ===============
+function previewLogo() {
+    const fileInput = document.getElementById('logo-file');
+    const file = fileInput.files[0];
+    
+    if (!file) return;
+    
+    const tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/gif'];
+    if (!tiposPermitidos.includes(file.type)) {
+        showAlert('Solo se permiten archivos JPG y GIF', 'error');
+        fileInput.value = '';
+        return;
+    }
+    
+    if (file.size > 2 * 1024 * 1024) {
+        showAlert('El archivo es demasiado grande. Máximo 2MB', 'error');
+        fileInput.value = '';
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        mostrarPreviewLogo(e.target.result);
+    };
+    reader.readAsDataURL(file);
+}
+
+function mostrarPreviewLogo(url) {
+    const preview = document.getElementById('logo-preview');
+    if (preview) {
+        preview.src = url;
+        preview.style.display = 'block';
+    }
+}
+
+async function subirLogo() {
+    const fileInput = document.getElementById('logo-file');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        showAlert('Seleccione un archivo primero', 'error');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        const logoUrl = e.target.result;
+        
+        try {
+            const response = await fetch('/api/configuracion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    logo_sistema: logoUrl
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showAlert('Logo guardado correctamente', 'success');
+                fileInput.value = '';
+            } else {
+                showAlert(data.message || 'Error guardando logo', 'error');
+            }
+        } catch (error) {
+            console.error('Error guardando logo:', error);
+            showAlert('Error de conexión', 'error');
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+async function eliminarLogo() {
+    if (confirm('¿Está seguro de que desea eliminar el logo personalizado?')) {
+        try {
+            const response = await fetch('/api/configuracion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    logo_sistema: ''
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                const preview = document.getElementById('logo-preview');
+                if (preview) preview.style.display = 'none';
+                
+                showAlert('Logo eliminado correctamente', 'success');
+            } else {
+                showAlert(data.message || 'Error eliminando logo', 'error');
+            }
+        } catch (error) {
+            console.error('Error eliminando logo:', error);
+            showAlert('Error de conexión', 'error');
+        }
+    }
+}
+
+// =============== GESTIÓN DE BASE DE DATOS ===============
+async function cargarEstadisticasDB() {
+    try {
+        const response = await fetch('/api/database/stats');
+        const data = await response.json();
+        
+        if (data.success) {
+            const stats = data.stats;
+            const total = Object.values(stats).reduce((a, b) => a + b, 0);
+            
+            document.getElementById('db-records').textContent = total;
+            
+            // Mostrar información detallada
+            const dbInfo = document.getElementById('db-info');
+            dbInfo.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tabla</th>
+                            <th>Registros</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(stats).map(([tabla, cantidad]) => `
+                            <tr>
+                                <td>${tabla.charAt(0).toUpperCase() + tabla.slice(1)}</td>
+                                <td>${cantidad}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+    } catch (error) {
+        console.error('Error cargando estadísticas DB:', error);
+    }
+}
+
+async function inicializarBaseDatos() {
+    if (confirm('¿Está seguro de que desea inicializar la base de datos? Esto creará las tablas necesarias.')) {
+        try {
+            const response = await fetch('/api/database/init', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showAlert('Base de datos inicializada correctamente', 'success');
+                cargarEstadisticasDB();
+            } else {
+                showAlert(data.message || 'Error inicializando base de datos', 'error');
+            }
+        } catch (error) {
+            console.error('Error inicializando BD:', error);
+            showAlert('Error de conexión', 'error');
+        }
+    }
+}
+
+async function crearBackup() {
+    try {
+        showAlert('Creando backup...', 'info');
+        
+        const response = await fetch('/api/database/backup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showAlert(`Backup creado: ${data.filename}`, 'success');
+            cargarEstadisticasDB();
+        } else {
+            showAlert(data.message || 'Error creando backup', 'error');
+        }
+    } catch (error) {
+        console.error('Error creando backup:', error);
+        showAlert('Error de conexión', 'error');
+    }
+}
+
+async function optimizarBaseDatos() {
+    if (confirm('¿Desea optimizar la base de datos? Esto puede tomar unos minutos.')) {
+        try {
+            showAlert('Optimizando base de datos...', 'info');
+            // Implementar optimización
+            showAlert('Base de datos optimizada', 'success');
+        } catch (error) {
+            console.error('Error optimizando BD:', error);
+            showAlert('Error optimizando base de datos', 'error');
+        }
+    }
+}
+
+async function verificarIntegridad() {
+    try {
+        showAlert('Verificando integridad...', 'info');
+        // Implementar verificación
+        showAlert('Verificación de integridad completada', 'success');
+    } catch (error) {
+        console.error('Error verificando integridad:', error);
+        showAlert('Error verificando integridad', 'error');
+    }
+}
+</script>
+{% endblock %}

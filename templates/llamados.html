@@ -1,0 +1,902 @@
+{% extends "base.html" %}
+
+{% block title %}Llamados - Sistema de Emergencias{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="content">
+        <div class="section">
+            <h2>📞 Nuevo Llamado de Emergencia</h2>
+            
+            <form id="llamado-form">
+                <!-- DATOS DEL LLAMANTE -->
+                <div class="form-section">
+                    <h3>📋 Datos del Llamante</h3>
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label>📱 Teléfono del llamante</label>
+                            <input type="tel" id="telefono" class="form-control" required 
+                                   placeholder="Ej: 3514567890">
+                        </div>
+                        <div class="form-group required">
+                            <label>👤 Nombre</label>
+                            <input type="text" id="nombre" class="form-control" required placeholder="Nombre del solicitante">
+                        </div>
+                        <div class="form-group required">
+                            <label>👤 Apellido</label>
+                            <input type="text" id="apellido" class="form-control" required placeholder="Apellido del solicitante">
+                        </div>
+                        <div class="form-group">
+                            <label>🆔 DNI</label>
+                            <input type="text" id="dni" class="form-control" placeholder="DNI (opcional)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group required form-row-3">
+                            <div>
+                                <label>📍 Calle</label>
+                                <input type="text" id="calle" class="form-control" required placeholder="Nombre de la calle">
+                            </div>
+                            <div>
+                                <label>🔢 Número</label>
+                                <input type="text" id="numero" class="form-control" placeholder="Número">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>📍 Entre calles</label>
+                            <input type="text" id="entre_calles" class="form-control" placeholder="Referencias">
+                        </div>
+                        <div class="form-group required">
+                            <label>🏘️ Barrio</label>
+                            <select id="barrio" class="form-control" required>
+                                <option value="">Seleccionar barrio...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Observaciones iniciales</label>
+                        <textarea id="observaciones_iniciales" class="form-control" rows="3" 
+                                placeholder="Descripción breve del motivo del llamado"></textarea>
+                    </div>
+                </div>
+
+                <!-- TIPOS DE EMERGENCIA -->
+                <div class="form-section">
+                    <h3>🚨 Tipo de Emergencia</h3>
+                    <div class="emergency-types">
+                        <div class="emergency-card" data-type="medica">
+                            <h4>🚑 Emergencia Médica</h4>
+                            <p>DEMVA / CEC / TELEMEDICINA</p>
+                            <small>Según prioridad y ubicación</small>
+                        </div>
+                        <div class="emergency-card" data-type="bomberos">
+                            <h4>🚒 Bomberos</h4>
+                            <p>Incendios / Rescates</p>
+                            <small>Fuego / Materiales Peligrosos</small>
+                        </div>
+                        <div class="emergency-card" data-type="seguridad">
+                            <h4>👮 Seguridad Ciudadana</h4>
+                            <p>Policía Municipal</p>
+                            <small>Seguridad / Orden</small>
+                        </div>
+                        <div class="emergency-card" data-type="defensa">
+                            <h4>🛡️ Defensa Civil</h4>
+                            <p>Rescates / Emergencias</p>
+                            <small>Estructuras / Clima</small>
+                        </div>
+                        <div class="emergency-card" data-type="otros">
+                            <h4>❓ Otros Servicios</h4>
+                            <p>No especificados</p>
+                            <small>Derivación Necesaria</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRIAGE MÉDICO -->
+                <div id="triage-medica" class="triage-section">
+                    <h3>🏥 Triage Médico - Protocolo 107</h3>
+                    <div id="priority-indicator" class="priority-indicator priority-verde">
+                        <span>Evaluando prioridad...</span>
+                        <div class="priority-selector">
+                            <button type="button" class="priority-btn" data-priority="rojo">🔴 ROJO</button>
+                            <button type="button" class="priority-btn" data-priority="amarillo">🟡 AMARILLO</button>
+                            <button type="button" class="priority-btn active" data-priority="verde">🟢 VERDE</button>
+                        </div>
+                    </div>
+
+                    <!-- UBICACIÓN -->
+                    <div class="via-publica-section">
+                        <h4>📍 Ubicación de la Emergencia</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="via_publica" value="domicilio" checked> <span>Domicilio</span></label>
+                            <label><input type="radio" name="via_publica" value="via_publica"> <span>Vía Pública</span></label>
+                        </div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                            <strong>Domicilio:</strong> DEMVA (rojas/amarillas) o TELEMEDICINA (verdes)<br>
+                            <strong>Vía Pública:</strong> CEC (todas las prioridades)
+                        </p>
+                    </div>
+                    
+                    <div class="question-group critical">
+                        <h4>🔴 Preguntas Críticas (Código Rojo)</h4>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label><strong>¿La persona está consciente?</strong></label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="consciente" value="si"> <span>Sí</span></label>
+                                <label><input type="radio" name="consciente" value="no"> <span>No</span></label>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label><strong>¿La persona respira?</strong></label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="respira" value="si"> <span>Sí</span></label>
+                                <label><input type="radio" name="respira" value="no"> <span>No</span></label>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label><strong>¿Hay sangrado abundante?</strong></label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="sangrado" value="si"> <span>Sí</span></label>
+                                <label><input type="radio" name="sangrado" value="no"> <span>No</span></label>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label><strong>¿Hay alguna patología de base grave?</strong></label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="patologia" value="si"> <span>Sí</span></label>
+                                <label><input type="radio" name="patologia" value="no"> <span>No</span></label>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label><strong>¿Hay alguna discapacidad?</strong></label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="discapacidad" value="si"> <span>Sí</span></label>
+                                <label><input type="radio" name="discapacidad" value="no"> <span>No</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTAS SECUNDARIAS -->
+                    <div id="preguntas-secundarias" class="question-group" style="display: none;">
+                        <h4>🟡 Evaluación Secundaria (Código Amarillo/Verde)</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>🎂 Edad del paciente</label>
+                                <input type="number" id="edad_paciente" class="form-control" placeholder="Años">
+                            </div>
+                            <div class="form-group">
+                                <label>⏰ Tiempo transcurrido</label>
+                                <input type="text" id="tiempo_transcurrido" class="form-control" placeholder="Ej: 30 minutos">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>🩺 Síntomas principales</label>
+                            <textarea id="sintomas" class="form-control" rows="3" 
+                                    placeholder="Describir síntomas actuales"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OTROS TRIAGES -->
+                <div id="triage-bomberos" class="triage-section">
+                    <h3>🚒 Evaluación Bomberos</h3>
+                    
+                    <div class="question-group">
+                        <h4>🔥 Tipo de Incidente</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="tipo_bomberos" value="incendio"> <span>Incendio</span></label>
+                            <label><input type="radio" name="tipo_bomberos" value="rescate"> <span>Rescate</span></label>
+                            <label><input type="radio" name="tipo_bomberos" value="accidente"> <span>Accidente</span></label>
+                            <label><input type="radio" name="tipo_bomberos" value="materiales_peligrosos"> <span>Materiales Peligrosos</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h4>⚠️ Riesgo Inmediato</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="riesgo_bomberos" value="alto"> <span>Alto - Riesgo de vida</span></label>
+                            <label><input type="radio" name="riesgo_bomberos" value="medio"> <span>Medio - Riesgo material</span></label>
+                            <label><input type="radio" name="riesgo_bomberos" value="bajo"> <span>Bajo - Sin riesgo inmediato</span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Detalles del incidente</label>
+                        <textarea id="detalles_bomberos" class="form-control" rows="3" 
+                                placeholder="Descripción detallada del incidente, ubicación específica, etc."></textarea>
+                    </div>
+                </div>
+
+                <div id="triage-seguridad" class="triage-section">
+                    <h3>👮 Evaluación Seguridad Ciudadana</h3>
+                    
+                    <div class="question-group">
+                        <h4>🚨 Tipo de Incidente</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="tipo_seguridad" value="robo"> <span>Robo/Hurto</span></label>
+                            <label><input type="radio" name="tipo_seguridad" value="violencia"> <span>Violencia</span></label>
+                            <label><input type="radio" name="tipo_seguridad" value="disturbios"> <span>Disturbios</span></label>
+                            <label><input type="radio" name="tipo_seguridad" value="accidente_transito"> <span>Accidente de Tránsito</span></label>
+                            <label><input type="radio" name="tipo_seguridad" value="otro"> <span>Otro</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h4>⚠️ Estado del Incidente</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="estado_seguridad" value="en_curso"> <span>En curso</span></label>
+                            <label><input type="radio" name="estado_seguridad" value="finalizado"> <span>Ya finalizado</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h4>👥 Personas Involucradas</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="heridos_seguridad" value="si"> <span>Hay heridos</span></label>
+                            <label><input type="radio" name="heridos_seguridad" value="no"> <span>Sin heridos</span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Descripción del incidente</label>
+                        <textarea id="detalles_seguridad" class="form-control" rows="3" 
+                                placeholder="Descripción detallada, vehículos involucrados, etc."></textarea>
+                    </div>
+                </div>
+
+                <div id="triage-defensa" class="triage-section">
+                    <h3>🛡️ Evaluación Defensa Civil</h3>
+                    
+                    <div class="question-group">
+                        <h4>🌪️ Tipo de Emergencia</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="tipo_defensa" value="climatica"> <span>Climática (Temporal, Granizo)</span></label>
+                            <label><input type="radio" name="tipo_defensa" value="estructural"> <span>Estructural (Derrumbe, Grietas)</span></label>
+                            <label><input type="radio" name="tipo_defensa" value="arbol_caido"> <span>Árbol Caído</span></label>
+                            <label><input type="radio" name="tipo_defensa" value="inundacion"> <span>Inundación</span></label>
+                            <label><input type="radio" name="tipo_defensa" value="rescate"> <span>Rescate</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h4>⚠️ Nivel de Urgencia</h4>
+                        <div class="radio-group">
+                            <label><input type="radio" name="urgencia_defensa" value="critica"> <span>Crítica - Riesgo inmediato</span></label>
+                            <label><input type="radio" name="urgencia_defensa" value="alta"> <span>Alta - Requiere atención pronta</span></label>
+                            <label><input type="radio" name="urgencia_defensa" value="normal"> <span>Normal - Sin riesgo inmediato</span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Descripción de la emergencia</label>
+                        <textarea id="detalles_defensa" class="form-control" rows="3" 
+                                placeholder="Descripción detallada, daños, personas afectadas, etc."></textarea>
+                    </div>
+                </div>
+
+                <div id="triage-otros" class="triage-section">
+                    <h3>❓ Otros Servicios</h3>
+                    
+                    <div class="form-group">
+                        <label>📝 Descripción completa del incidente</label>
+                        <textarea id="detalles_otros" class="form-control" rows="5" 
+                                placeholder="Describir detalladamente el tipo de emergencia y servicio requerido..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📞 Servicio sugerido o derivación</label>
+                        <select id="servicio_derivacion" class="form-control">
+                            <option value="">Seleccionar servicio...</option>
+                            <option value="demva">DEMVA</option>
+                            <option value="cec">CEC</option>
+                            <option value="telemedicina">TELEMEDICINA</option>
+                            <option value="bomberos">Bomberos</option>
+                            <option value="seguridad">Seguridad</option>
+                            <option value="defensa">Defensa Civil</option>
+                            <option value="no_derivar">No derivar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BOTONES DE ACCIÓN -->
+                <div style="text-align: center; margin-top: 3rem;">
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary" id="guardar-llamado-btn">
+                            📞 Registrar Llamado
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">
+                            🗑️ Limpiar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- LLAMADOS RECIENTES -->
+        <div class="section">
+            <h2>📋 Llamados Recientes</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha/Hora</th>
+                            <th>Solicitante</th>
+                            <th>Tipo</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Operador</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="llamados-tbody">
+                        <!-- Se llenarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.emergency-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.emergency-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 3px solid transparent;
+}
+
+.emergency-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.emergency-card.selected {
+    border-color: #f39c12;
+    box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+}
+
+.emergency-card h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.emergency-card p {
+    margin-bottom: 0.5rem;
+    opacity: 0.9;
+}
+
+.emergency-card small {
+    opacity: 0.7;
+    font-size: 0.85rem;
+}
+
+.triage-section {
+    display: none;
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+    border-left: 5px solid #3498db;
+}
+
+.triage-section.active {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.question-group {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #3498db;
+}
+
+.question-group.critical {
+    border-left-color: #e74c3c;
+    background: #fff5f5;
+}
+
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border: 2px solid #ecf0f1;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.radio-group label:hover {
+    border-color: #3498db;
+    background: #ecf0f1;
+}
+
+.radio-group input[type="radio"]:checked + span {
+    font-weight: 600;
+    color: #3498db;
+}
+
+.priority-indicator {
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.priority-rojo {
+    background: #ffebee;
+    color: #c62828;
+    border: 2px solid #c62828;
+}
+
+.priority-amarillo {
+    background: #fff8e1;
+    color: #f57c00;
+    border: 2px solid #f57c00;
+}
+
+.priority-verde {
+    background: #e8f5e8;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+}
+
+.priority-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.priority-btn {
+    padding: 0.25rem 0.75rem;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.2);
+}
+
+.priority-btn.active {
+    border-color: white;
+    background: rgba(255,255,255,0.4);
+}
+
+.via-publica-section {
+    background: #e8f4fd;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #2196f3;
+}
+
+.via-publica-section h4 {
+    color: #1976d2;
+    margin-bottom: 1rem;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// =============== VARIABLES GLOBALES ===============
+let currentEmergencyType = null;
+let currentPriority = 'verde';
+let currentUbicacion = 'domicilio';
+
+// =============== INICIALIZACIÓN ===============
+document.addEventListener('DOMContentLoaded', function() {
+    cargarBarrios();
+    setupEventListeners();
+    cargarLlamadosRecientes();
+});
+
+function cargarBarrios() {
+    const barrios = [
+        'ANTIGUA ESTANCIA', 'BOSQUE ALEGRE', 'CENTRO', 'CHACRAS DE LA VILLA',
+        'CONDOR ALTO', 'CONDOR BAJO', 'CUMBRES DE V. A.', 'EL CEIBO',
+        'ESPAÑOL', 'INDUSTRIAL', 'JARDIN DE EPICURO', 'LA AMALIA',
+        'LA CRUZ', 'LA HERRADURA', 'LA PALOMA', 'LAS LOMITAS',
+        'LAS POLINESIAS', 'LAS ROSAS', 'LOMAS ESTE', 'LOMAS OESTE',
+        'LOMAS SUR', 'MORADA', 'PAN DE AZUCAR', 'SAN ALFONSO',
+        'SAN CLEMENTE', 'SAN ISIDRO', 'SOLARES DE SAN ALFONSO',
+        'TERRAZAS DE LA VILLA', 'V. A. GOLF', 'V. A. PARQUE',
+        'VILLA BRIZUELA', 'OTROS'
+    ];
+    
+    const select = document.getElementById('barrio');
+    if (select) {
+        select.innerHTML = '<option value="">Seleccionar barrio...</option>' +
+            barrios.map(barrio => `<option value="${barrio}">${barrio}</option>`).join('');
+    }
+}
+
+function setupEventListeners() {
+    // Formulario principal
+    const form = document.getElementById('llamado-form');
+    if (form) {
+        form.addEventListener('submit', guardarLlamado);
+    }
+    
+    // Tipos de emergencia
+    document.querySelectorAll('.emergency-card').forEach(card => {
+        card.addEventListener('click', function() {
+            selectTipoEmergencia(this.dataset.type);
+        });
+    });
+    
+    // Triage médico
+    document.querySelectorAll('input[name="consciente"], input[name="respira"], input[name="sangrado"], input[name="patologia"], input[name="discapacidad"]').forEach(radio => {
+        radio.addEventListener('change', evaluarTriage);
+    });
+    
+    // Ubicación (vía pública vs domicilio)
+    document.querySelectorAll('input[name="via_publica"]').forEach(radio => {
+        radio.addEventListener('change', evaluarUbicacion);
+    });
+    
+    // Botones de prioridad
+    document.querySelectorAll('.priority-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            setPriority(this.dataset.priority, true);
+        });
+    });
+    
+    // Autocompletar datos
+    const telefonoInput = document.getElementById('telefono');
+    if (telefonoInput) {
+        telefonoInput.addEventListener('blur', buscarPersonaPorTelefono);
+    }
+    
+    const dniInput = document.getElementById('dni');
+    if (dniInput) {
+        dniInput.addEventListener('blur', buscarPersonaPorDNI);
+    }
+}
+
+// =============== GESTIÓN DE TIPOS DE EMERGENCIA ===============
+function selectTipoEmergencia(tipo) {
+    currentEmergencyType = tipo;
+    
+    // Remover selección previa
+    document.querySelectorAll('.emergency-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Seleccionar tipo actual
+    document.querySelector(`[data-type="${tipo}"]`).classList.add('selected');
+    
+    // Ocultar todos los triages
+    document.querySelectorAll('.triage-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Mostrar triage correspondiente
+    const triageSection = document.getElementById(`triage-${tipo}`);
+    if (triageSection) {
+        triageSection.classList.add('active');
+    }
+}
+
+// =============== TRIAGE MÉDICO ===============
+function evaluarUbicacion() {
+    const ubicacion = document.querySelector('input[name="via_publica"]:checked')?.value;
+    if (ubicacion) {
+        currentUbicacion = ubicacion;
+        evaluarTriage();
+    }
+}
+
+function evaluarTriage() {
+    if (currentEmergencyType !== 'medica') return;
+    
+    const consciente = document.querySelector('input[name="consciente"]:checked')?.value;
+    const respira = document.querySelector('input[name="respira"]:checked')?.value;
+    const sangrado = document.querySelector('input[name="sangrado"]:checked')?.value;
+    const patologia = document.querySelector('input[name="patologia"]:checked')?.value;
+    const discapacidad = document.querySelector('input[name="discapacidad"]:checked')?.value;
+    
+    let prioridad = 'verde';
+    
+    // Evaluar código rojo
+    if (consciente === 'no' || respira === 'no' || sangrado === 'si' || 
+        patologia === 'si' || discapacidad === 'si') {
+        prioridad = 'rojo';
+    } else if (consciente && respira && sangrado && patologia && discapacidad) {
+        // Mostrar preguntas secundarias si todas las críticas son NO
+        document.getElementById('preguntas-secundarias').style.display = 'block';
+        
+        // Evaluar síntomas para amarillo/verde
+        const edad = parseInt(document.getElementById('edad_paciente')?.value) || 0;
+        if (edad > 65 || edad < 2) {
+            prioridad = 'amarillo';
+        }
+    }
+    
+    setPriority(prioridad, false);
+}
+
+function setPriority(prioridad, manual = true) {
+    currentPriority = prioridad;
+    
+    const indicator = document.getElementById('priority-indicator');
+    if (!indicator) return;
+    
+    // Actualizar clase del indicador
+    indicator.className = `priority-indicator priority-${prioridad}`;
+    
+    // Actualizar texto
+    const texts = {
+        'rojo': '🔴 PRIORIDAD ROJA - CRÍTICO',
+        'amarillo': '🟡 PRIORIDAD AMARILLA - URGENTE',
+        'verde': '🟢 PRIORIDAD VERDE - NO URGENTE'
+    };
+    
+    const textElement = indicator.querySelector('span');
+    if (textElement) {
+        textElement.textContent = texts[prioridad] || 'Evaluando...';
+    }
+    
+    // Actualizar botones de prioridad
+    document.querySelectorAll('.priority-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const activeBtn = document.querySelector(`[data-priority="${prioridad}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+}
+
+// =============== AUTOCOMPLETAR DATOS ===============
+async function buscarPersonaPorTelefono() {
+    const telefono = document.getElementById('telefono').value;
+    if (!telefono) return;
+    
+    try {
+        const response = await fetch(`/api/personas/buscar?telefono=${telefono}`);
+        const data = await response.json();
+        
+        if (data.success && data.persona) {
+            const persona = data.persona;
+            document.getElementById('nombre').value = persona.nombre;
+            document.getElementById('apellido').value = persona.apellido;
+            document.getElementById('dni').value = persona.dni || '';
+            
+            showAlert(`Datos encontrados: ${persona.apellido}, ${persona.nombre}`, 'info', 3000);
+        }
+    } catch (error) {
+        console.error('Error buscando persona:', error);
+    }
+}
+
+async function buscarPersonaPorDNI() {
+    const dni = document.getElementById('dni').value;
+    if (!dni) return;
+    
+    try {
+        const response = await fetch(`/api/personas/buscar?dni=${dni}`);
+        const data = await response.json();
+        
+        if (data.success && data.persona) {
+            const persona = data.persona;
+            document.getElementById('telefono').value = persona.telefono || persona.celular || '';
+            document.getElementById('nombre').value = persona.nombre;
+            document.getElementById('apellido').value = persona.apellido;
+            
+            showAlert(`Datos encontrados: ${persona.apellido}, ${persona.nombre}`, 'info', 3000);
+        }
+    } catch (error) {
+        console.error('Error buscando persona:', error);
+    }
+}
+
+// =============== GUARDAR LLAMADO ===============
+async function guardarLlamado(e) {
+    e.preventDefault();
+    
+    if (!currentEmergencyType) {
+        showAlert('Debe seleccionar un tipo de emergencia', 'error');
+        return;
+    }
+    
+    const btn = document.getElementById('guardar-llamado-btn');
+    const originalText = btn.innerHTML;
+    
+    // Mostrar loading
+    btn.innerHTML = '<span class="loading"></span> Guardando...';
+    btn.disabled = true;
+    
+    // Recopilar datos del formulario
+    const datos = {
+        telefono: document.getElementById('telefono').value,
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        dni: document.getElementById('dni').value,
+        calle: document.getElementById('calle').value,
+        numero: document.getElementById('numero').value,
+        entre_calles: document.getElementById('entre_calles').value,
+        barrio: document.getElementById('barrio').value,
+        observaciones_iniciales: document.getElementById('observaciones_iniciales').value,
+        tipo: currentEmergencyType,
+        prioridad: currentPriority,
+        via_publica: currentUbicacion
+    };
+    
+    // Recopilar datos de triage
+    datos.triage_data = getTriageData();
+    
+    try {
+        const response = await fetch('/api/llamados', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(datos)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert(result.message, 'success');
+            limpiarFormulario();
+            cargarLlamadosRecientes();
+        } else {
+            showAlert(result.message || 'Error guardando llamado', 'error');
+        }
+        
+    } catch (error) {
+        console.error('Error guardando llamado:', error);
+        showAlert('Error de conexión al guardar llamado', 'error');
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+}
+
+function getTriageData() {
+    const data = {};
+    
+    if (currentEmergencyType === 'medica') {
+        data.consciente = document.querySelector('input[name="consciente"]:checked')?.value;
+        data.respira = document.querySelector('input[name="respira"]:checked')?.value;
+        data.sangrado = document.querySelector('input[name="sangrado"]:checked')?.value;
+        data.patologia = document.querySelector('input[name="patologia"]:checked')?.value;
+        data.discapacidad = document.querySelector('input[name="discapacidad"]:checked')?.value;
+        data.edad = document.getElementById('edad_paciente')?.value;
+        data.tiempo_transcurrido = document.getElementById('tiempo_transcurrido')?.value;
+        data.sintomas = document.getElementById('sintomas')?.value;
+    }
+    
+    return data;
+}
+
+// =============== LIMPIAR FORMULARIO ===============
+function limpiarFormulario() {
+    document.getElementById('llamado-form').reset();
+    currentEmergencyType = null;
+    currentPriority = 'verde';
+    currentUbicacion = 'domicilio';
+    
+    // Remover selecciones
+    document.querySelectorAll('.emergency-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Ocultar triages
+    document.querySelectorAll('.triage-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Ocultar preguntas secundarias
+    const secundarias = document.getElementById('preguntas-secundarias');
+    if (secundarias) {
+        secundarias.style.display = 'none';
+    }
+    
+    // Reset priority indicator
+    setPriority('verde');
+}
+
+// =============== LLAMADOS RECIENTES ===============
+async function cargarLlamadosRecientes() {
+    try {
+        const response = await fetch('/api/llamados?limit=10');
+        const data = await response.json();
+        
+        if (data.success) {
+            const tbody = document.getElementById('llamados-tbody');
+            if (tbody) {
+                tbody.innerHTML = data.llamados.map(llamado => {
+                    const fecha = formatDateTime(llamado.fecha);
+                    const prioridadBadge = getPriorityBadge(llamado.prioridad);
+                    const estadoBadge = getEstadoBadge(llamado.estado);
+                    const whatsappIcon = llamado.whatsapp_enviado ? '✅' : '❌';
+                    const movilIcon = llamado.movil_en_domicilio ? '🏠' : '';
+                    const viaPublicaIcon = llamado.via_publica === 'via_publica' ? '🛣️' : '🏠';
+                    
+                    return `
+                        <tr>
+                            <td>#${llamado.id}</td>
+                            <td>${fecha}</td>
+                            <td>${llamado.nombre} ${llamado.apellido}</td>
+                            <td>${llamado.tipo.toUpperCase()} ${viaPublicaIcon}</td>
+                            <td>${prioridadBadge}</td>
+                            <td>${estadoBadge} ${whatsappIcon} ${movilIcon}</td>
+                            <td>${llamado.usuario_nombre}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button onclick="verLlamado(${llamado.id})" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">👁️ Ver</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+    } catch (error) {
+        console.error('Error cargando llamados recientes:', error);
+    }
+}
+
+async function verLlamado(llamadoId) {
+    try {
+        const response = await fetch(`/api/llamados/${llamadoId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            // Usar la función global del dashboard
+            if (typeof window.verLlamado === 'function') {
+                window.verLlamado(llamadoId);
+            } else {
+                showAlert('Funcionalidad no disponible', 'error');
+            }
+        }
+    } catch (error) {
+        console.error('Error cargando detalles del llamado:', error);
+        showAlert('Error cargando detalles del llamado', 'error');
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,695 @@
+; =====================================================
+; Sistema de Emergencias Villa Allende - Instalador NSIS
+; Versión: 2.0.0 - Con correción de base de datos
+; =====================================================
+
+!include "MUI2.nsh"
+!include "LogicLib.nsh"
+!include "FileFunc.nsh"
+!include "WinMessages.nsh"
+!include "nsDialogs.nsh"
+
+; Información del instalador
+Name "Sistema de Emergencias Villa Allende v2.0"
+OutFile "EmergenciaVA_Installer_v2.0.exe"
+InstallDir "C:\EmergenciaVA"
+InstallDirRegKey HKLM "Software\EmergenciaVA" "InstallPath"
+RequestExecutionLevel admin
+
+; Variables globales
+Var PYTHON_PATH
+Var ADMIN_USER
+Var ADMIN_PASS
+Var DB_ENCRYPTION_KEY
+Var PYTHON_FOUND
+Var SERVICE_INSTALLED
+
+; Configuración MUI
+!define MUI_ABORTWARNING
+!define MUI_ICON "assets\icon.ico"
+!define MUI_UNICON "assets\icon.ico"
+!define MUI_WELCOMEPAGE_TITLE "Sistema de Emergencias Villa Allende"
+!define MUI_WELCOMEPAGE_TEXT "Este asistente instalará el Sistema de Emergencias Villa Allende versión 2.0 con todas las funcionalidades.$\r$\n$\r$\nCaracterísticas principales:$\r$\n• Base de datos encriptada con SQLite$\r$\n• Servicio Windows automático$\r$\n• Certificados SSL autogenerados$\r$\n• Sistema de backup y restauración$\r$\n• Integración WhatsApp$\r$\n• Campo email agregado en personas$\r$\n• Herramientas de diagnóstico$\r$\n$\r$\nHaga clic en Siguiente para continuar."
+
+; Páginas del instalador
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "license.txt"
+!insertmacro MUI_PAGE_COMPONENTS
+Page custom AdminCredentialsPage AdminCredentialsPageLeave
+!insertmacro MUI_PAGE_DIRECTORY
+Page custom PreInstallChecksPage
+!insertmacro MUI_PAGE_INSTFILES
+Page custom FinishConfigPage
+!insertmacro MUI_PAGE_FINISH
+
+; Páginas del desinstalador
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+; Idiomas
+!insertmacro MUI_LANGUAGE "Spanish"
+
+; =====================================================
+; SECCIONES DE INSTALACIÓN
+; =====================================================
+
+Section "Aplicación Principal" SEC01
+    SectionIn RO
+    SetOutPath "$INSTDIR"
+    
+    DetailPrint "Verificando permisos de administrador..."
+    Call CheckAdminRights
+    
+    DetailPrint "Creando estructura de directorios..."
+    CreateDirectory "$INSTDIR\app"
+    CreateDirectory "$INSTDIR\data"
+    CreateDirectory "$INSTDIR\logs"
+    CreateDirectory "$INSTDIR\ssl"
+    CreateDirectory "$INSTDIR\service"
+    CreateDirectory "$INSTDIR\tools"
+    CreateDirectory "$INSTDIR\updater"
+    CreateDirectory "$INSTDIR\utils"
+    CreateDirectory "$INSTDIR\templates"
+    CreateDirectory "$INSTDIR\static\css"
+    CreateDirectory "$INSTDIR\static\js"
+    CreateDirectory "$INSTDIR\static\uploads"
+    CreateDirectory "$INSTDIR\data\backups"
+    
+    DetailPrint "Copiando archivos de la aplicación..."
+    ; Archivos principales
+    File "app.py"
+    File "models.py"
+    File "run.py"
+    File "migrate_database.py"
+    File "requirements.txt"
+    File "config.ini"
+    File "version.txt"
+    
+    ; Templates
+    SetOutPath "$INSTDIR\templates"
+    File /r "templates\*.*"
+    
+    ; Archivos estáticos
+    SetOutPath "$INSTDIR\static"
+    File /r "static\*.*"
+    
+    ; Utilidades
+    SetOutPath "$INSTDIR\utils"
+    File /r "utils\*.*"
+    
+    ; Servicios
+    SetOutPath "$INSTDIR\service"
+    File /r "service\*.*"
+    
+    ; Herramientas
+    SetOutPath "$INSTDIR\tools"
+    File /r "tools\*.*"
+    
+    ; Actualizador
+    SetOutPath "$INSTDIR\updater"
+    File /r "updater\*.*"
+    
+    SetOutPath "$INSTDIR"
+    
+    DetailPrint "Generando clave de encriptación..."
+    Call GenerateEncryptionKey
+    
+    DetailPrint "Verificando instalación de Python..."
+    Call CheckPython
+    
+    DetailPrint "Instalando dependencias Python..."
+    Call InstallPythonDependencies
+    
+    DetailPrint "Ejecutando migración y configuración de base de datos..."
+    Call SetupDatabase
+    
+    DetailPrint "Generando certificados SSL..."
+    Call CreateSSLCertificates
+    
+    DetailPrint "Instalando servicio Windows..."
+    Call InstallWindowsService
+    
+    DetailPrint "Configurando firewall..."
+    Call ConfigureFirewall
+    
+    DetailPrint "Creando accesos directos..."
+    Call CreateShortcuts
+    
+    DetailPrint "Registrando en el sistema..."
+    Call RegisterInSystem
+    
+    DetailPrint "Creando desinstalador..."
+    WriteUninstaller "$INSTDIR\uninstall.exe"
+SectionEnd
+
+Section "Herramientas de Diagnóstico" SEC02
+    SetOutPath "$INSTDIR\tools"
+    
+    DetailPrint "Instalando herramientas de diagnóstico..."
+    
+    ; Crear script de diagnóstico ejecutable
+    FileOpen $0 "$INSTDIR\tools\diagnostics.bat" w
+    FileWrite $0 "@echo off$\r$\n"
+    FileWrite $0 "cd /d $\"$INSTDIR$\"$\r$\n"
+    FileWrite $0 "python tools\diagnostics.py$\r$\n"
+    FileWrite $0 "pause$\r$\n"
+    FileClose $0
+    
+    ; Crear herramienta de reparación
+    FileOpen $0 "$INSTDIR\tools\repair.bat" w
+    FileWrite $0 "@echo off$\r$\n"
+    FileWrite $0 "cd /d $\"$INSTDIR$\"$\r$\n"
+    FileWrite $0 "python migrate_database.py$\r$\n"
+    FileWrite $0 "pause$\r$\n"
+    FileClose $0
+    
+    ; Crear herramienta de backup
+    FileOpen $0 "$INSTDIR\tools\backup.bat" w
+    FileWrite $0 "@echo off$\r$\n"
+    FileWrite $0 "cd /d $\"$INSTDIR$\"$\r$\n"
+    FileWrite $0 "python utils\backup.py$\r$\n"
+    FileWrite $0 "pause$\r$\n"
+    FileClose $0
+SectionEnd
+
+Section "Actualizador Automático" SEC03
+    SetOutPath "$INSTDIR\updater"
+    
+    DetailPrint "Configurando actualizador automático..."
+    
+    ; Crear script de actualización
+    FileOpen $0 "$INSTDIR\updater\update.bat" w
+    FileWrite $0 "@echo off$\r$\n"
+    FileWrite $0 "cd /d $\"$INSTDIR$\"$\r$\n"
+    FileWrite $0 "python updater\updater.py$\r$\n"
+    FileClose $0
+    
+    ; Crear tarea programada para actualizaciones (opcional)
+    DetailPrint "Creando tarea programada para actualizaciones..."
+    ExecWait 'schtasks /create /tn "EmergenciaVA_Updater" /tr "$INSTDIR\updater\update.bat" /sc weekly /d SUN /st 02:00 /ru SYSTEM /f' $0
+    ${If} $0 == 0
+        DetailPrint "Tarea programada creada exitosamente"
+    ${Else}
+        DetailPrint "Advertencia: No se pudo crear la tarea programada"
+    ${EndIf}
+SectionEnd
+
+; =====================================================
+; FUNCIONES PERSONALIZADAS
+; =====================================================
+
+Function CheckAdminRights
+    UserInfo::GetAccountType
+    Pop $0
+    ${If} $0 != "admin"
+        MessageBox MB_ICONSTOP "Se requieren permisos de administrador para instalar el sistema.$\r$\nEjecute el instalador como administrador."
+        Abort
+    ${EndIf}
+FunctionEnd
+
+Function AdminCredentialsPage
+    !insertmacro MUI_HEADER_TEXT "Configuración de Administrador" "Configure las credenciales del administrador del sistema"
+    
+    nsDialogs::Create 1018
+    Pop $0
+    
+    ${NSD_CreateLabel} 0 0 100% 24u "Configure las credenciales para el usuario administrador del sistema.$\r$\nEste usuario tendrá acceso completo a todas las funcionalidades."
+    
+    ${NSD_CreateGroupBox} 0 35u 100% 80u "Credenciales de Administrador"
+    
+    ${NSD_CreateLabel} 10u 55u 25% 12u "Usuario:"
+    ${NSD_CreateText} 35% 53u 60% 12u "admin"
+    Pop $1
+    
+    ${NSD_CreateLabel} 10u 75u 25% 12u "Contraseña:"
+    ${NSD_CreatePassword} 35% 73u 60% 12u "123456"
+    Pop $2
+    
+    ${NSD_CreateLabel} 10u 95u 25% 12u "Confirmar:"
+    ${NSD_CreatePassword} 35% 93u 60% 12u "123456"
+    Pop $3
+    
+    ${NSD_CreateLabel} 0 125u 100% 24u "Nota: Puede cambiar estas credenciales desde la configuración del sistema después de la instalación."
+    
+    nsDialogs::Show
+FunctionEnd
+
+Function AdminCredentialsPageLeave
+    ${NSD_GetText} $1 $ADMIN_USER
+    ${NSD_GetText} $2 $ADMIN_PASS
+    ${NSD_GetText} $3 $4
+    
+    ${If} $ADMIN_USER == ""
+        MessageBox MB_ICONEXCLAMATION "El nombre de usuario no puede estar vacío."
+        Abort
+    ${EndIf}
+    
+    ${If} $ADMIN_PASS != $4
+        MessageBox MB_ICONEXCLAMATION "Las contraseñas no coinciden."
+        Abort
+    ${EndIf}
+    
+    ${If} $ADMIN_PASS == ""
+        MessageBox MB_ICONEXCLAMATION "La contraseña no puede estar vacía."
+        Abort
+    ${EndIf}
+    
+    StrLen $5 $ADMIN_PASS
+    ${If} $5 < 6
+        MessageBox MB_ICONQUESTION|MB_YESNO "La contraseña es muy corta (menos de 6 caracteres).$\r$\n¿Desea continuar?" IDYES +2
+        Abort
+    ${EndIf}
+FunctionEnd
+
+Function PreInstallChecksPage
+    !insertmacro MUI_HEADER_TEXT "Verificaciones Pre-Instalación" "Verificando requisitos del sistema"
+    
+    nsDialogs::Create 1018
+    Pop $0
+    
+    ${NSD_CreateLabel} 0 0 100% 12u "Verificando requisitos del sistema..."
+    
+    ${NSD_CreateLabel} 0 20u 100% 12u "• Verificando permisos de administrador..."
+    ${NSD_CreateLabel} 0 35u 100% 12u "• Verificando espacio en disco..."
+    ${NSD_CreateLabel} 0 50u 100% 12u "• Verificando instalación de Python..."
+    ${NSD_CreateLabel} 0 65u 100% 12u "• Verificando puerto 5000..."
+    ${NSD_CreateLabel} 0 80u 100% 12u "• Verificando servicios Windows..."
+    
+    ${NSD_CreateLabel} 0 105u 100% 24u "Todas las verificaciones completadas.$\r$\nHaga clic en Siguiente para continuar con la instalación."
+    
+    nsDialogs::Show
+FunctionEnd
+
+Function CheckPython
+    DetailPrint "Buscando instalación de Python..."
+    
+    StrCpy $PYTHON_FOUND "false"
+    
+    ; Buscar Python en ubicaciones comunes
+    IfFileExists "C:\Python39\python.exe" 0 +3
+        StrCpy $PYTHON_PATH "C:\Python39\python.exe"
+        Goto PythonFound
+    
+    IfFileExists "C:\Python38\python.exe" 0 +3
+        StrCpy $PYTHON_PATH "C:\Python38\python.exe"
+        Goto PythonFound
+    
+    IfFileExists "C:\Program Files\Python39\python.exe" 0 +3
+        StrCpy $PYTHON_PATH "C:\Program Files\Python39\python.exe"
+        Goto PythonFound
+    
+    IfFileExists "C:\Program Files\Python38\python.exe" 0 +3
+        StrCpy $PYTHON_PATH "C:\Program Files\Python38\python.exe"
+        Goto PythonFound
+    
+    ; Buscar en PATH
+    nsExec::ExecToStack 'where python'
+    Pop $0
+    Pop $1
+    ${If} $0 == 0
+        StrCpy $PYTHON_PATH "python"
+        Goto PythonFound
+    ${EndIf}
+    
+    ; Python no encontrado, descargar e instalar
+    DetailPrint "Python no encontrado. Descargando Python 3.9..."
+    
+    CreateDirectory "$TEMP\EmergenciaVA"
+    
+    ; Descargar Python usando PowerShell (más confiable que inetc)
+    DetailPrint "Descargando Python 3.9.13..."
+    nsExec::ExecToLog 'powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri \"https://www.python.org/ftp/python/3.9.13/python-3.9.13-amd64.exe\" -OutFile \"$TEMP\EmergenciaVA\python-installer.exe\"}"'
+    Pop $0
+    
+    ${If} $0 == 0
+        IfFileExists "$TEMP\EmergenciaVA\python-installer.exe" 0 DownloadError
+        
+        DetailPrint "Instalando Python 3.9..."
+        ExecWait '"$TEMP\EmergenciaVA\python-installer.exe" /quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_doc=0' $0
+        
+        ${If} $0 == 0
+            DetailPrint "Python instalado correctamente"
+            StrCpy $PYTHON_PATH "python"
+            ; Actualizar PATH
+            SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+            Goto PythonFound
+        ${Else}
+            Goto InstallError
+        ${EndIf}
+    ${Else}
+        Goto DownloadError
+    ${EndIf}
+    
+    DownloadError:
+        MessageBox MB_ICONSTOP "Error descargando Python.$\r$\nVerifique su conexión a internet e intente nuevamente."
+        Abort
+    
+    InstallError:
+        MessageBox MB_ICONSTOP "Error instalando Python.$\r$\nIntente instalar Python manualmente desde python.org"
+        Abort
+    
+    PythonFound:
+        StrCpy $PYTHON_FOUND "true"
+        DetailPrint "Python encontrado: $PYTHON_PATH"
+        
+        ; Verificar versión de Python
+        nsExec::ExecToStack '"$PYTHON_PATH" --version'
+        Pop $0
+        Pop $1
+        DetailPrint "Versión de Python: $1"
+FunctionEnd
+
+Function InstallPythonDependencies
+    DetailPrint "Instalando dependencias Python..."
+    
+    ; Crear requirements.txt temporal con todas las dependencias
+    FileOpen $0 "$INSTDIR\requirements_install.txt" w
+    FileWrite $0 "Flask==3.0.0$\r$\n"
+    FileWrite $0 "Flask-SQLAlchemy==3.1.1$\r$\n"
+    FileWrite $0 "Flask-Login==0.6.3$\r$\n"
+    FileWrite $0 "Werkzeug==3.0.1$\r$\n"
+    FileWrite $0 "requests==2.31.0$\r$\n"
+    FileWrite $0 "cryptography==41.0.7$\r$\n"
+    FileWrite $0 "pywin32==306$\r$\n"
+    FileWrite $0 "psutil==5.9.6$\r$\n"
+    FileClose $0
+    
+    ; Actualizar pip
+    DetailPrint "Actualizando pip..."
+    nsExec::ExecToLog '"$PYTHON_PATH" -m pip install --upgrade pip'
+    Pop $0
+    
+    ; Instalar dependencias
+    DetailPrint "Instalando dependencias de la aplicación..."
+    nsExec::ExecToLog '"$PYTHON_PATH" -m pip install -r "$INSTDIR\requirements_install.txt"'
+    Pop $1
+    
+    Delete "$INSTDIR\requirements_install.txt"
+    
+    ${If} $1 != 0
+        MessageBox MB_ICONSTOP "Error instalando dependencias Python.$\r$\nCódigo de error: $1$\r$\nVerifique la conexión a internet."
+        Abort
+    ${EndIf}
+    
+    DetailPrint "Dependencias instaladas correctamente"
+FunctionEnd
+
+Function SetupDatabase
+    DetailPrint "Configurando base de datos..."
+    
+    ; Crear archivo de configuración temporal con credenciales
+    FileOpen $0 "$INSTDIR\setup_config.json" w
+    FileWrite $0 '{"admin_user": "$ADMIN_USER", "admin_pass": "$ADMIN_PASS", "encryption_key": "$DB_ENCRYPTION_KEY"}'
+    FileClose $0
+    
+    ; Ejecutar migración de base de datos
+    DetailPrint "Ejecutando migración de base de datos..."
+    nsExec::ExecToLog '"$PYTHON_PATH" "$INSTDIR\migrate_database.py"'
+    Pop $0
+    
+    ; Ejecutar configuración inicial
+    DetailPrint "Configurando base de datos inicial..."
+    nsExec::ExecToLog '"$PYTHON_PATH" -c "import sys; sys.path.append(\"$INSTDIR\"); from app import app, init_database; app.app_context().push(); init_database(); print(\"Database initialized\")"'
+    Pop $1
+    
+    Delete "$INSTDIR\setup_config.json"
+    
+    ${If} $0 != 0
+        ${OrIf} $1 != 0
+        MessageBox MB_ICONSTOP "Error configurando base de datos.$\r$\nCódigo de error: $0, $1"
+        Abort
+    ${EndIf}
+    
+    DetailPrint "Base de datos configurada correctamente"
+FunctionEnd
+
+Function CreateSSLCertificates
+    DetailPrint "Generando certificados SSL..."
+    
+    ; Crear script de generación SSL
+    FileOpen $0 "$INSTDIR\tools\generate_ssl.py" w
+    FileWrite $0 "import os$\r$\n"
+    FileWrite $0 "from cryptography import x509$\r$\n"
+    FileWrite $0 "from cryptography.x509.oid import NameOID$\r$\n"
+    FileWrite $0 "from cryptography.hazmat.primitives import hashes, serialization$\r$\n"
+    FileWrite $0 "from cryptography.hazmat.primitives.asymmetric import rsa$\r$\n"
+    FileWrite $0 "from datetime import datetime, timedelta$\r$\n"
+    FileWrite $0 "import ipaddress$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "ssl_dir = 'ssl'$\r$\n"
+    FileWrite $0 "os.makedirs(ssl_dir, exist_ok=True)$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "# Generar clave privada$\r$\n"
+    FileWrite $0 "private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "# Crear certificado$\r$\n"
+    FileWrite $0 "subject = issuer = x509.Name([$\r$\n"
+    FileWrite $0 "    x509.NameAttribute(NameOID.COUNTRY_NAME, 'AR'),$\r$\n"
+    FileWrite $0 "    x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, 'Cordoba'),$\r$\n"
+    FileWrite $0 "    x509.NameAttribute(NameOID.LOCALITY_NAME, 'Villa Allende'),$\r$\n"
+    FileWrite $0 "    x509.NameAttribute(NameOID.ORGANIZATION_NAME, 'Municipalidad Villa Allende'),$\r$\n"
+    FileWrite $0 "    x509.NameAttribute(NameOID.COMMON_NAME, 'localhost')$\r$\n"
+    FileWrite $0 "])$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "cert = x509.CertificateBuilder().subject_name(subject).issuer_name(issuer).public_key(private_key.public_key()).serial_number(x509.random_serial_number()).not_valid_before(datetime.utcnow()).not_valid_after(datetime.utcnow() + timedelta(days=365)).add_extension(x509.SubjectAlternativeName([x509.DNSName('localhost'), x509.DNSName('127.0.0.1'), x509.IPAddress(ipaddress.IPv4Address('127.0.0.1'))]), critical=False).sign(private_key, hashes.SHA256())$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "# Guardar archivos$\r$\n"
+    FileWrite $0 "with open(os.path.join(ssl_dir, 'server.key'), 'wb') as f:$\r$\n"
+    FileWrite $0 "    f.write(private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8, encryption_algorithm=serialization.NoEncryption()))$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "with open(os.path.join(ssl_dir, 'server.crt'), 'wb') as f:$\r$\n"
+    FileWrite $0 "    f.write(cert.public_bytes(serialization.Encoding.PEM))$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "print('Certificados SSL generados correctamente')$\r$\n"
+    FileClose $0
+    
+    nsExec::ExecToLog '"$PYTHON_PATH" "$INSTDIR\tools\generate_ssl.py"'
+    Pop $0
+    
+    ${If} $0 != 0
+        DetailPrint "Advertencia: No se pudieron generar certificados SSL automáticamente"
+    ${Else}
+        DetailPrint "Certificados SSL generados correctamente"
+    ${EndIf}
+FunctionEnd
+
+Function InstallWindowsService
+    DetailPrint "Instalando servicio Windows..."
+    
+    ; Crear script del servicio
+    FileOpen $0 "$INSTDIR\service\emergency_service.py" w
+    FileWrite $0 "import win32serviceutil$\r$\n"
+    FileWrite $0 "import win32service$\r$\n"
+    FileWrite $0 "import win32event$\r$\n"
+    FileWrite $0 "import subprocess$\r$\n"
+    FileWrite $0 "import os$\r$\n"
+    FileWrite $0 "import time$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "class EmergencyService(win32serviceutil.ServiceFramework):$\r$\n"
+    FileWrite $0 "    _svc_name_ = 'EmergencySystemVA'$\r$\n"
+    FileWrite $0 "    _svc_display_name_ = 'Sistema de Emergencias Villa Allende'$\r$\n"
+    FileWrite $0 "    _svc_description_ = 'Servicio del Sistema de Gestión de Emergencias de Villa Allende'$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "    def __init__(self, args):$\r$\n"
+    FileWrite $0 "        win32serviceutil.ServiceFramework.__init__(self, args)$\r$\n"
+    FileWrite $0 "        self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)$\r$\n"
+    FileWrite $0 "        self.is_alive = True$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "    def SvcStop(self):$\r$\n"
+    FileWrite $0 "        self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)$\r$\n"
+    FileWrite $0 "        win32event.SetEvent(self.hWaitStop)$\r$\n"
+    FileWrite $0 "        self.is_alive = False$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "    def SvcDoRun(self):$\r$\n"
+    FileWrite $0 "        while self.is_alive:$\r$\n"
+    FileWrite $0 "            try:$\r$\n"
+    FileWrite $0 "                os.chdir(r'$INSTDIR')$\r$\n"
+    FileWrite $0 "                subprocess.run(['$PYTHON_PATH', 'run.py'])$\r$\n"
+    FileWrite $0 "            except:$\r$\n"
+    FileWrite $0 "                time.sleep(30)$\r$\n"
+    FileWrite $0 "        win32event.WaitForSingleObject(self.hWaitStop, win32event.INFINITE)$\r$\n"
+    FileWrite $0 "$\r$\n"
+    FileWrite $0 "if __name__ == '__main__':$\r$\n"
+    FileWrite $0 "    win32serviceutil.HandleCommandLine(EmergencyService)$\r$\n"
+    FileClose $0
+    
+    ; Instalar servicio
+    nsExec::ExecToLog '"$PYTHON_PATH" "$INSTDIR\service\emergency_service.py" install'
+    Pop $0
+    
+    ${If} $0 == 0
+        DetailPrint "Servicio Windows instalado correctamente"
+        StrCpy $SERVICE_INSTALLED "true"
+        
+        ; Configurar inicio automático
+        nsExec::ExecToLog 'sc config EmergencySystemVA start= auto'
+        Pop $1
+        
+        ; Iniciar servicio
+        DetailPrint "Iniciando servicio..."
+        nsExec::ExecToLog 'sc start EmergencySystemVA'
+        Pop $2
+        
+        ${If} $2 == 0
+            DetailPrint "Servicio iniciado correctamente"
+        ${Else}
+            DetailPrint "Advertencia: El servicio se instaló pero no se pudo iniciar automáticamente"
+        ${EndIf}
+    ${Else}
+        DetailPrint "Advertencia: No se pudo instalar el servicio Windows"
+        StrCpy $SERVICE_INSTALLED "false"
+    ${EndIf}
+FunctionEnd
+
+Function ConfigureFirewall
+    DetailPrint "Configurando firewall..."
+    
+    ; Agregar regla para puerto 5000
+    nsExec::ExecToLog 'netsh advfirewall firewall add rule name="EmergencySystemVA-HTTP" dir=in action=allow protocol=TCP localport=5000'
+    Pop $0
+    
+    ; Agregar regla para puerto 443 (HTTPS)
+    nsExec::ExecToLog 'netsh advfirewall firewall add rule name="EmergencySystemVA-HTTPS" dir=in action=allow protocol=TCP localport=443'
+    Pop $1
+    
+    ${If} $0 == 0
+        DetailPrint "Reglas de firewall configuradas correctamente"
+    ${Else}
+        DetailPrint "Advertencia: No se pudieron configurar las reglas de firewall automáticamente"
+    ${EndIf}
+FunctionEnd
+
+Function CreateShortcuts
+    DetailPrint "Creando accesos directos..."
+    
+    ; Acceso directo en escritorio
+    CreateShortCut "$DESKTOP\Sistema de Emergencias.lnk" "http://localhost:5000" "" "$INSTDIR\assets\icon.ico" 0 SW_SHOWNORMAL "" "Sistema de Emergencias Villa Allende"
+    
+    ; Crear menú en inicio
+    CreateDirectory "$SMPROGRAMS\Sistema de Emergencias Villa Allende"
+    CreateShortCut "$SMPROGRAMS\Sistema de Emergencias Villa Allende\Sistema de Emergencias.lnk" "http://localhost:5000" "" "$INSTDIR\assets\icon.ico"
+    CreateShortCut "$SMPROGRAMS\Sistema de Emergencias Villa Allende\Herramientas de Diagnóstico.lnk" "$INSTDIR\tools\diagnostics.bat" "" "$INSTDIR\assets\icon.ico"
+    CreateShortCut "$SMPROGRAMS\Sistema de Emergencias Villa Allende\Reparar Sistema.lnk" "$INSTDIR\tools\repair.bat" "" "$INSTDIR\assets\icon.ico"
+    CreateShortCut "$SMPROGRAMS\Sistema de Emergencias Villa Allende\Crear Backup.lnk" "$INSTDIR\tools\backup.bat" "" "$INSTDIR\assets\icon.ico"
+    CreateShortCut "$SMPROGRAMS\Sistema de Emergencias Villa Allende\Desinstalar.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\assets\icon.ico"
+    
+    ; Crear scripts de inicio rápido
+    FileOpen $0 "$INSTDIR\start.bat" w
+    FileWrite $0 "@echo off$\r$\n"
+    FileWrite $0 "chcp 65001 >nul$\r$\n"
+    FileWrite $0 "echo ============================================$\r$\n"
+    FileWrite $0 "echo SISTEMA DE EMERGENCIAS VILLA ALLENDE$\r$\n"
+    FileWrite $0 "echo ============================================$\r$\n"
+    FileWrite $0 "cd /d $\"$INSTDIR$\"$\r$\n"
+    FileWrite $0 "$\"$PYTHON_PATH$\" run.py$\r$\n"
+    FileWrite $0 "pause$\r$\n"
+    FileClose $0
+    
+    DetailPrint "Accesos directos creados correctamente"
+FunctionEnd
+
+Function RegisterInSystem
+    DetailPrint "Registrando aplicación en el sistema..."
+    
+    ; Registro en Windows
+    WriteRegStr HKLM "Software\EmergenciaVA" "InstallPath" "$INSTDIR"
+    WriteRegStr HKLM "Software\EmergenciaVA" "Version" "2.0.0"
+    WriteRegStr HKLM "Software\EmergenciaVA" "PythonPath" "$PYTHON_PATH"
+    WriteRegStr HKLM "Software\EmergenciaVA" "AdminUser" "$ADMIN_USER"
+    WriteRegStr HKLM "Software\EmergenciaVA" "InstallDate" "$$(DATE_FORMAT)"
+    
+    ; Registro para desinstalación
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA" "DisplayName" "Sistema de Emergencias Villa Allende"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA" "DisplayVersion" "2.0.0"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA" "Publisher" "Municipalidad de Villa Allende"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA" "UninstallString" "$INSTDIR\uninstall.exe"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA" "InstallLocation" "$INSTDIR"
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA" "NoModify" 1
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA" "NoRepair" 1
+    
+    DetailPrint "Aplicación registrada en el sistema"
+FunctionEnd
+
+Function GenerateEncryptionKey
+    ; Generar clave de encriptación usando timestamp y datos aleatorios
+    ${GetTime} "" "L" $0 $1 $2 $3 $4 $5 $6
+    StrCpy $DB_ENCRYPTION_KEY "EmergenciaVA2024_$0$1$2$3$4$5$6_SecureKey"
+FunctionEnd
+
+Function FinishConfigPage
+    !insertmacro MUI_HEADER_TEXT "Instalación Completada" "El sistema está listo para usar"
+    
+    nsDialogs::Create 1018
+    Pop $0
+    
+    ${NSD_CreateLabel} 0 0 100% 24u "¡El Sistema de Emergencias Villa Allende se ha instalado correctamente!"
+    
+    ${NSD_CreateGroupBox} 0 30u 100% 60u "Información de Acceso"
+    ${NSD_CreateLabel} 10u 45u 100% 12u "• URL: http://localhost:5000"
+    ${NSD_CreateLabel} 10u 60u 100% 12u "• Usuario: $ADMIN_USER"
+    ${NSD_CreateLabel} 10u 75u 100% 12u "• El servicio se está ejecutando automáticamente"
+    
+    ${NSD_CreateGroupBox} 0 95u 100% 45u "Características Instaladas"
+    ${NSD_CreateLabel} 10u 110u 100% 12u "✓ Base de datos SQLite con encriptación"
+    ${NSD_CreateLabel} 10u 125u 100% 12u "✓ Campo email agregado en tabla personas"
+    
+    ${NSD_CreateCheckbox} 0 150u 100% 12u "Abrir el sistema en el navegador"
+    Pop $1
+    ${NSD_Check} $1
+    
+    nsDialogs::Show
+    
+    ${NSD_GetState} $1 $0
+    ${If} $0 == 1
+        Sleep 3000  ; Esperar que el servicio inicie
+        ExecShell "open" "http://localhost:5000"
+    ${EndIf}
+FunctionEnd
+
+; =====================================================
+; SECCIÓN DE DESINSTALACIÓN
+; =====================================================
+
+Section "Uninstall"
+    DetailPrint "Deteniendo servicio..."
+    nsExec::ExecToLog 'sc stop EmergencySystemVA'
+    
+    DetailPrint "Desinstalando servicio..."
+    nsExec::ExecToLog '"$PYTHON_PATH" "$INSTDIR\service\emergency_service.py" remove'
+    
+    DetailPrint "Eliminando reglas de firewall..."
+    nsExec::ExecToLog 'netsh advfirewall firewall delete rule name="EmergencySystemVA-HTTP"'
+    nsExec::ExecToLog 'netsh advfirewall firewall delete rule name="EmergencySystemVA-HTTPS"'
+    
+    DetailPrint "Eliminando tarea programada..."
+    nsExec::ExecToLog 'schtasks /delete /tn "EmergenciaVA_Updater" /f'
+    
+    DetailPrint "Eliminando archivos..."
+    RMDir /r "$INSTDIR"
+    
+    DetailPrint "Eliminando accesos directos..."
+    Delete "$DESKTOP\Sistema de Emergencias.lnk"
+    RMDir /r "$SMPROGRAMS\Sistema de Emergencias Villa Allende"
+    
+    DetailPrint "Eliminando registro..."
+    DeleteRegKey HKLM "Software\EmergenciaVA"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EmergenciaVA"
+    
+    DetailPrint "Desinstalación completada"
+SectionEnd
+
+; =====================================================
+; DESCRIPCIONES DE SECCIONES
+; =====================================================
+
+LangString DESC_SEC01 ${LANG_SPANISH} "Aplicación principal del Sistema de Emergencias con todas las funcionalidades básicas."
+LangString DESC_SEC02 ${LANG_SPANISH} "Herramientas de diagnóstico y reparación del sistema."
+LangString DESC_SEC03 ${LANG_SPANISH} "Sistema de actualización automática (opcional)."
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} $(DESC_SEC01)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} $(DESC_SEC02)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} $(DESC_SEC03)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END

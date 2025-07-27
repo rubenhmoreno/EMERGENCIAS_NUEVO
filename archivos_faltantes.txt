@@ -1,0 +1,216 @@
+# ===========================================
+# license.txt - Archivo de Licencia
+# ===========================================
+
+SISTEMA DE EMERGENCIAS VILLA ALLENDE v2.0
+ACUERDO DE LICENCIA DE SOFTWARE
+
+Copyright (c) 2024 Municipalidad de Villa Allende
+Todos los derechos reservados.
+
+Este software está desarrollado específicamente para uso interno 
+de la Municipalidad de Villa Allende para la gestión de llamados 
+de emergencia.
+
+TÉRMINOS DE USO:
+- Este software es de uso exclusivo para personal autorizado
+- Prohibida la redistribución sin autorización expresa
+- Los datos manejados son confidenciales y deben protegerse
+- El usuario es responsable del uso adecuado del sistema
+
+GARANTÍA:
+El software se proporciona "tal como está" sin garantías expresas 
+o implícitas. El desarrollador no se hace responsable por daños 
+derivados del uso del software.
+
+SOPORTE:
+Para soporte técnico, consulte la documentación incluida o 
+contacte al administrador del sistema.
+
+# ===========================================
+# utils/__init__.py - Archivo vacío para Python
+# ===========================================
+
+# Este archivo permite que Python trate el directorio como un paquete
+
+# ===========================================
+# service/__init__.py - Archivo vacío para Python
+# ===========================================
+
+# Este archivo permite que Python trate el directorio como un paquete
+
+# ===========================================
+# tools/__init__.py - Archivo vacío para Python
+# ===========================================
+
+# Este archivo permite que Python trate el directorio como un paquete
+
+# ===========================================
+# updater/__init__.py - Archivo vacío para Python
+# ===========================================
+
+# Este archivo permite que Python trate el directorio como un paquete
+
+# ===========================================
+# instalador_simplificado.nsi - Versión simplificada del instalador
+# ===========================================
+
+; Sistema de Emergencias Villa Allende - Instalador Simplificado
+; Versión: 2.0.0
+
+!include "MUI2.nsh"
+!include "LogicLib.nsh"
+
+; Información del instalador
+Name "Sistema de Emergencias Villa Allende v2.0"
+OutFile "EmergenciaVA_Installer_v2.0.exe"
+InstallDir "C:\EmergenciaVA"
+RequestExecutionLevel admin
+
+; Variables
+Var PYTHON_PATH
+Var ADMIN_USER
+Var ADMIN_PASS
+
+; Configuración MUI
+!define MUI_ABORTWARNING
+!define MUI_WELCOMEPAGE_TITLE "Sistema de Emergencias Villa Allende v2.0"
+!define MUI_WELCOMEPAGE_TEXT "Este instalador configurará el Sistema de Emergencias.$\r$\n$\r$\nFuncionalidades principales:$\r$\n• Gestión completa de llamados$\r$\n• Base de datos con campo email$\r$\n• Integración WhatsApp$\r$\n• Sistema de backup$\r$\n$\r$\nHaga clic en Siguiente para continuar."
+
+; Páginas
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+; Idioma
+!insertmacro MUI_LANGUAGE "Spanish"
+
+; Sección principal
+Section "Aplicación Principal" SEC01
+    SectionIn RO
+    SetOutPath "$INSTDIR"
+    
+    DetailPrint "Creando directorios..."
+    CreateDirectory "$INSTDIR\templates"
+    CreateDirectory "$INSTDIR\static\css"
+    CreateDirectory "$INSTDIR\static\js"
+    CreateDirectory "$INSTDIR\static\uploads"
+    CreateDirectory "$INSTDIR\utils"
+    CreateDirectory "$INSTDIR\service"
+    CreateDirectory "$INSTDIR\tools"
+    CreateDirectory "$INSTDIR\data"
+    CreateDirectory "$INSTDIR\logs"
+    CreateDirectory "$INSTDIR\ssl"
+    CreateDirectory "$INSTDIR\backups"
+    
+    DetailPrint "Copiando archivos..."
+    ; Archivos principales
+    File "app.py"
+    File "models.py"
+    File "run.py"
+    File "migrate_database.py"
+    File "requirements.txt"
+    File "config.ini"
+    File "version.txt"
+    
+    ; Directorios
+    SetOutPath "$INSTDIR\templates"
+    File /r "templates\*.*"
+    
+    SetOutPath "$INSTDIR\static"
+    File /r "static\*.*"
+    
+    SetOutPath "$INSTDIR\utils"
+    File /r "utils\*.*"
+    
+    SetOutPath "$INSTDIR\service"
+    File /r "service\*.*"
+    
+    SetOutPath "$INSTDIR\tools"
+    File /r "tools\*.*"
+    
+    SetOutPath "$INSTDIR"
+    
+    DetailPrint "Verificando Python..."
+    Call CheckPython
+    
+    DetailPrint "Instalando dependencias..."
+    Call InstallDependencies
+    
+    DetailPrint "Configurando sistema..."
+    Call SetupSystem
+    
+    DetailPrint "Creando accesos directos..."
+    Call CreateShortcuts
+    
+    WriteUninstaller "$INSTDIR\uninstall.exe"
+SectionEnd
+
+Function CheckPython
+    ; Buscar Python
+    nsExec::ExecToStack 'python --version'
+    Pop $0
+    
+    ${If} $0 != 0
+        MessageBox MB_YESNO "Python no encontrado. ¿Desea descargarlo automáticamente?" IDYES DownloadPython IDNO SkipPython
+        
+        DownloadPython:
+            DetailPrint "Descargando Python..."
+            NSISdl::download "https://www.python.org/ftp/python/3.9.13/python-3.9.13-amd64.exe" "$TEMP\python-installer.exe"
+            ExecWait '"$TEMP\python-installer.exe" /quiet InstallAllUsers=1 PrependPath=1'
+            Goto PythonOK
+        
+        SkipPython:
+            MessageBox MB_OK "Instale Python manualmente desde python.org"
+            Quit
+    ${EndIf}
+    
+    PythonOK:
+        StrCpy $PYTHON_PATH "python"
+FunctionEnd
+
+Function InstallDependencies
+    nsExec::ExecToLog '"$PYTHON_PATH" -m pip install --upgrade pip'
+    nsExec::ExecToLog '"$PYTHON_PATH" -m pip install -r "$INSTDIR\requirements.txt"'
+FunctionEnd
+
+Function SetupSystem
+    ; Migrar base de datos
+    nsExec::ExecToLog '"$PYTHON_PATH" "$INSTDIR\migrate_database.py"'
+    
+    ; Inicializar aplicación
+    nsExec::ExecToLog '"$PYTHON_PATH" -c "import sys; sys.path.append(\"$INSTDIR\"); from app import app, init_database; app.app_context().push(); init_database()"'
+    
+    ; Configurar firewall
+    nsExec::ExecToLog 'netsh advfirewall firewall add rule name="EmergencySystemVA" dir=in action=allow protocol=TCP localport=5000'
+FunctionEnd
+
+Function CreateShortcuts
+    ; Script de inicio
+    FileOpen $0 "$INSTDIR\start.bat" w
+    FileWrite $0 "@echo off$\r$\n"
+    FileWrite $0 "cd /d $\"$INSTDIR$\"$\r$\n"
+    FileWrite $0 "python run.py$\r$\n"
+    FileWrite $0 "pause$\r$\n"
+    FileClose $0
+    
+    ; Acceso directo en escritorio
+    CreateShortCut "$DESKTOP\Emergencia VA.lnk" "$INSTDIR\start.bat" "" "" 0
+    
+    ; Menú inicio
+    CreateDirectory "$SMPROGRAMS\Sistema Emergencias VA"
+    CreateShortCut "$SMPROGRAMS\Sistema Emergencias VA\Sistema de Emergencias.lnk" "$INSTDIR\start.bat"
+    CreateShortCut "$SMPROGRAMS\Sistema Emergencias VA\Abrir en Navegador.lnk" "http://localhost:5000"
+    CreateShortCut "$SMPROGRAMS\Sistema Emergencias VA\Desinstalar.lnk" "$INSTDIR\uninstall.exe"
+FunctionEnd
+
+; Desinstalador
+Section "Uninstall"
+    RMDir /r "$INSTDIR"
+    Delete "$DESKTOP\Emergencia VA.lnk"
+    RMDir /r "$SMPROGRAMS\Sistema Emergencias VA"
+    
+    ; Eliminar regla de firewall
+    nsExec::ExecToLog 'netsh advfirewall firewall delete rule name="EmergencySystemVA"'
+SectionEnd
