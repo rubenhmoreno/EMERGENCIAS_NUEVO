@@ -102,35 +102,16 @@ class DatabaseMigrator:
         )
     
     def migrate_usuarios_table(self, conn):
-        """Migrar tabla usuarios agregando TODOS los campos necesarios"""
+        """Migrar tabla usuarios agregando campos de seguridad"""
         self.log_migration("🔄 Migrando tabla 'usuarios'...")
         
         if not self.check_table_exists(conn, 'usuarios'):
             self.log_migration("ℹ️ Tabla 'usuarios' no existe, se creará con la nueva estructura")
             return True
         
-        # Agregar TODAS las columnas que pueden faltar
+        # Agregar campos de seguridad
         success = True
         
-        # Campos básicos (por si vienen de versión muy antigua)
-        success &= self.add_column_if_not_exists(
-            conn, 'usuarios', 'email', 'VARCHAR(120)'
-        )
-        
-        success &= self.add_column_if_not_exists(
-            conn, 'usuarios', 'telefono', 'VARCHAR(20)'
-        )
-        
-        success &= self.add_column_if_not_exists(
-            conn, 'usuarios', 'ultimo_login', 'DATETIME'
-        )
-        
-        # Campo que causaba el error
-        success &= self.add_column_if_not_exists(
-            conn, 'usuarios', 'llamados_atendidos', 'INTEGER DEFAULT 0'
-        )
-        
-        # Campos de seguridad
         success &= self.add_column_if_not_exists(
             conn, 'usuarios', 'intentos_login', 'INTEGER DEFAULT 0'
         )
@@ -231,19 +212,11 @@ class DatabaseMigrator:
             else:
                 checks.append("❌ Campo 'email' NO existe en tabla 'personas'")
             
-            # Verificar campos críticos en usuarios
-            critical_user_columns = ['llamados_atendidos', 'intentos_login', 'bloqueado_hasta']
-            user_columns_ok = True
-            
-            for column in critical_user_columns:
-                if self.check_column_exists(conn, 'usuarios', column):
-                    checks.append(f"✅ Campo '{column}' existe en tabla 'usuarios'")
-                else:
-                    checks.append(f"❌ Campo '{column}' NO existe en tabla 'usuarios'")
-                    user_columns_ok = False
-            
-            if user_columns_ok:
-                checks.append("✅ Todos los campos críticos en tabla 'usuarios'")
+            # Verificar campos de seguridad en usuarios
+            if self.check_column_exists(conn, 'usuarios', 'intentos_login'):
+                checks.append("✅ Campos de seguridad en tabla 'usuarios'")
+            else:
+                checks.append("❌ Campos de seguridad faltantes en tabla 'usuarios'")
             
             # Verificar configuraciones
             cursor.execute("SELECT COUNT(*) FROM configuracion")

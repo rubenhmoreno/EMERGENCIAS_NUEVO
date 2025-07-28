@@ -1,0 +1,755 @@
+2025-07-27 21:07:09,921 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 21:07:09,921 - INFO - ============================================================
+2025-07-27 21:07:09,922 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_210709
+2025-07-27 21:07:09,923 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 21:07:09,923 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 21:07:09,924 - INFO - ℹ️ Tabla 'personas' no existe, se creará con la nueva estructura
+2025-07-27 21:07:09,924 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 21:07:09,924 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 21:07:09,925 - INFO - ℹ️ Tabla 'usuarios' no existe, se creará con la nueva estructura
+2025-07-27 21:07:09,925 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 21:07:09,925 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 21:07:09,926 - INFO - ℹ️ Tabla 'configuracion' no existe, se creará con la nueva estructura
+2025-07-27 21:07:09,926 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 21:07:09,926 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 21:07:09,926 - INFO - ❌ Error insertando configuraciones por defecto: no such table: configuracion
+2025-07-27 21:07:09,927 - INFO - ❌ Error en migración: configuraciones por defecto
+2025-07-27 21:07:09,927 - INFO - ❌ MIGRACIÓN FALLÓ
+2025-07-27 21:08:02,375 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 21:08:02,375 - INFO - ============================================================
+2025-07-27 21:08:02,376 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_210802
+2025-07-27 21:08:02,377 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 21:08:02,377 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 21:08:02,377 - INFO - ℹ️ Tabla 'personas' no existe, se creará con la nueva estructura
+2025-07-27 21:08:02,377 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 21:08:02,377 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 21:08:02,377 - INFO - ℹ️ Tabla 'usuarios' no existe, se creará con la nueva estructura
+2025-07-27 21:08:02,378 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 21:08:02,378 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 21:08:02,378 - INFO - ℹ️ Tabla 'configuracion' no existe, se creará con la nueva estructura
+2025-07-27 21:08:02,378 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 21:08:02,378 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 21:08:02,378 - INFO - ❌ Error insertando configuraciones por defecto: no such table: configuracion
+2025-07-27 21:08:02,378 - INFO - ❌ Error en migración: configuraciones por defecto
+2025-07-27 21:08:02,378 - INFO - ❌ MIGRACIÓN FALLÓ
+2025-07-27 21:39:29,718 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 21:39:29,719 - INFO - ============================================================
+2025-07-27 21:39:29,720 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_213929
+2025-07-27 21:39:29,720 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 21:39:29,732 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 21:39:29,732 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 21:39:29,733 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 21:39:29,733 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 21:39:29,733 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 21:39:29,733 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 21:39:29,733 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 21:39:29,733 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 21:39:29,733 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 21:39:29,733 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 21:39:29,734 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 21:39:29,734 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 21:39:29,734 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 21:39:29,734 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 21:39:29,734 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 21:39:29,736 - INFO - ✅ 14 configuraciones por defecto agregadas
+2025-07-27 21:39:29,736 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 21:39:29,737 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 21:39:29,737 - INFO - ✅ Campos de seguridad en tabla 'usuarios'
+2025-07-27 21:39:29,737 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 21:39:29,737 - INFO - ⚠️ No hay usuarios admin activos
+2025-07-27 21:39:29,737 - INFO - ============================================================
+2025-07-27 21:39:29,737 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 21:39:29,737 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_213929
+2025-07-27 21:39:29,737 - INFO - ============================================================
+2025-07-27 21:39:39,746 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 21:39:39,746 - INFO - ============================================================
+2025-07-27 21:39:39,747 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_213939
+2025-07-27 21:39:39,748 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 21:39:39,749 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 21:39:39,749 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 21:39:39,749 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 21:39:39,750 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 21:39:39,750 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 21:39:39,750 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 21:39:39,750 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 21:39:39,750 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 21:39:39,750 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 21:39:39,750 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 21:39:39,750 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 21:39:39,750 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 21:39:39,751 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 21:39:39,751 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 21:39:39,751 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 21:39:39,751 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 21:39:39,751 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 21:39:39,751 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 21:39:39,752 - INFO - ✅ Campos de seguridad en tabla 'usuarios'
+2025-07-27 21:39:39,752 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 21:39:39,752 - INFO - ⚠️ No hay usuarios admin activos
+2025-07-27 21:39:39,752 - INFO - ============================================================
+2025-07-27 21:39:39,752 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 21:39:39,752 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_213939
+2025-07-27 21:39:39,752 - INFO - ============================================================
+2025-07-27 21:39:39,780 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 21:39:39,780 - INFO - ============================================================
+2025-07-27 21:39:39,781 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_213939
+2025-07-27 21:39:39,782 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 21:39:39,782 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 21:39:39,782 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 21:39:39,783 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 21:39:39,783 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 21:39:39,783 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 21:39:39,783 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 21:39:39,783 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 21:39:39,783 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 21:39:39,783 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 21:39:39,784 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 21:39:39,784 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 21:39:39,784 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 21:39:39,784 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 21:39:39,784 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 21:39:39,784 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 21:39:39,785 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 21:39:39,785 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 21:39:39,785 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 21:39:39,785 - INFO - ✅ Campos de seguridad en tabla 'usuarios'
+2025-07-27 21:39:39,786 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 21:39:39,786 - INFO - ⚠️ No hay usuarios admin activos
+2025-07-27 21:39:39,786 - INFO - ============================================================
+2025-07-27 21:39:39,786 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 21:39:39,786 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_213939
+2025-07-27 21:39:39,786 - INFO - ============================================================
+2025-07-27 21:39:39,786 - INFO - ✅ Migración de base de datos completada
+2025-07-27 21:39:39,794 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 21:40:52,086 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 21:40:52,087 - INFO - ============================================================
+2025-07-27 21:40:52,088 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_214052
+2025-07-27 21:40:52,088 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 21:40:52,089 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 21:40:52,089 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 21:40:52,089 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 21:40:52,089 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 21:40:52,089 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 21:40:52,089 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 21:40:52,090 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 21:40:52,090 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 21:40:52,090 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 21:40:52,090 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 21:40:52,090 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 21:40:52,090 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 21:40:52,090 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 21:40:52,090 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 21:40:52,090 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 21:40:52,091 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 21:40:52,091 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 21:40:52,091 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 21:40:52,091 - INFO - ✅ Campos de seguridad en tabla 'usuarios'
+2025-07-27 21:40:52,091 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 21:40:52,091 - INFO - ⚠️ No hay usuarios admin activos
+2025-07-27 21:40:52,092 - INFO - ============================================================
+2025-07-27 21:40:52,092 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 21:40:52,092 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_214052
+2025-07-27 21:40:52,092 - INFO - ============================================================
+2025-07-27 21:40:52,114 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 21:40:52,115 - INFO - ============================================================
+2025-07-27 21:40:52,116 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_214052
+2025-07-27 21:40:52,116 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 21:40:52,117 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 21:40:52,117 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 21:40:52,117 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 21:40:52,117 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 21:40:52,117 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 21:40:52,117 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 21:40:52,118 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 21:40:52,118 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 21:40:52,118 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 21:40:52,118 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 21:40:52,118 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 21:40:52,119 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 21:40:52,119 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 21:40:52,119 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 21:40:52,119 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 21:40:52,119 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 21:40:52,119 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 21:40:52,120 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 21:40:52,120 - INFO - ✅ Campos de seguridad en tabla 'usuarios'
+2025-07-27 21:40:52,120 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 21:40:52,120 - INFO - ⚠️ No hay usuarios admin activos
+2025-07-27 21:40:52,120 - INFO - ============================================================
+2025-07-27 21:40:52,120 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 21:40:52,120 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_214052
+2025-07-27 21:40:52,120 - INFO - ============================================================
+2025-07-27 21:40:52,120 - INFO - ✅ Migración de base de datos completada
+2025-07-27 21:40:52,127 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 22:17:21,280 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:17:21,280 - INFO - ============================================================
+2025-07-27 22:17:21,281 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_221721
+2025-07-27 22:17:21,283 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:17:21,283 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:17:21,283 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:17:21,283 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:17:21,284 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:17:21,284 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:17:21,284 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:17:21,284 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,284 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,284 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,284 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,285 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,285 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,285 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:17:21,285 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:17:21,285 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:17:21,285 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:17:21,285 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:17:21,285 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:17:21,285 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:17:21,286 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:17:21,286 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:17:21,286 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:17:21,286 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:17:21,286 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:17:21,286 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:17:21,287 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:17:21,287 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:17:21,287 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:17:21,287 - INFO - ============================================================
+2025-07-27 22:17:21,287 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:17:21,287 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_221721
+2025-07-27 22:17:21,287 - INFO - ============================================================
+2025-07-27 22:17:21,309 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:17:21,309 - INFO - ============================================================
+2025-07-27 22:17:21,310 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_221721
+2025-07-27 22:17:21,310 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:17:21,311 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:17:21,311 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:17:21,311 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:17:21,312 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:17:21,312 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:17:21,312 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:17:21,313 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,313 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,314 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,314 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,314 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,314 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:17:21,315 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:17:21,315 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:17:21,315 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:17:21,315 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:17:21,316 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:17:21,316 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:17:21,316 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:17:21,317 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:17:21,317 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:17:21,317 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:17:21,318 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:17:21,318 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:17:21,318 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:17:21,318 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:17:21,318 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:17:21,319 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:17:21,319 - INFO - ============================================================
+2025-07-27 22:17:21,319 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:17:21,319 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_221721
+2025-07-27 22:17:21,319 - INFO - ============================================================
+2025-07-27 22:17:21,319 - INFO - ✅ Migración de base de datos completada
+2025-07-27 22:17:21,327 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 22:18:45,866 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:18:45,866 - INFO - ============================================================
+2025-07-27 22:18:45,867 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_221845
+2025-07-27 22:18:45,868 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:18:45,869 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:18:45,869 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:18:45,869 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:18:45,870 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:18:45,870 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:18:45,870 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:18:45,870 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,870 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,870 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,871 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,871 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,871 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,871 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:18:45,871 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:18:45,871 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:18:45,871 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:18:45,871 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:18:45,871 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:18:45,871 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:18:45,872 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:18:45,872 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:18:45,872 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:18:45,872 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:18:45,873 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:18:45,873 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:18:45,873 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:18:45,873 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:18:45,873 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:18:45,873 - INFO - ============================================================
+2025-07-27 22:18:45,873 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:18:45,873 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_221845
+2025-07-27 22:18:45,873 - INFO - ============================================================
+2025-07-27 22:18:45,895 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:18:45,895 - INFO - ============================================================
+2025-07-27 22:18:45,896 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_221845
+2025-07-27 22:18:45,897 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:18:45,897 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:18:45,898 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:18:45,898 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:18:45,898 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:18:45,898 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:18:45,898 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:18:45,899 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,899 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,899 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,900 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,900 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,900 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:18:45,901 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:18:45,901 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:18:45,901 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:18:45,901 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:18:45,902 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:18:45,902 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:18:45,902 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:18:45,903 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:18:45,903 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:18:45,904 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:18:45,904 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:18:45,904 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:18:45,904 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:18:45,904 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:18:45,904 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:18:45,904 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:18:45,904 - INFO - ============================================================
+2025-07-27 22:18:45,904 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:18:45,904 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_221845
+2025-07-27 22:18:45,905 - INFO - ============================================================
+2025-07-27 22:18:45,905 - INFO - ✅ Migración de base de datos completada
+2025-07-27 22:18:45,912 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 22:27:50,325 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:27:50,325 - INFO - ============================================================
+2025-07-27 22:27:50,327 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_222750
+2025-07-27 22:27:50,327 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:27:50,328 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:27:50,328 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:27:50,328 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:27:50,328 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:27:50,328 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:27:50,328 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:27:50,328 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,329 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,329 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,329 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,329 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,329 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,329 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:27:50,329 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:27:50,330 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:27:50,330 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:27:50,330 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:27:50,330 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:27:50,330 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:27:50,331 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:27:50,331 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:27:50,331 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:27:50,332 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:27:50,332 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:27:50,332 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:27:50,332 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:27:50,332 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:27:50,332 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:27:50,332 - INFO - ============================================================
+2025-07-27 22:27:50,332 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:27:50,332 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_222750
+2025-07-27 22:27:50,332 - INFO - ============================================================
+2025-07-27 22:27:50,353 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:27:50,354 - INFO - ============================================================
+2025-07-27 22:27:50,355 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_222750
+2025-07-27 22:27:50,355 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:27:50,356 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:27:50,356 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:27:50,356 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:27:50,356 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:27:50,356 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:27:50,356 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:27:50,357 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,357 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,357 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,357 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,357 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,357 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:27:50,357 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:27:50,358 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:27:50,358 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:27:50,358 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:27:50,358 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:27:50,358 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:27:50,358 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:27:50,359 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:27:50,359 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:27:50,359 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:27:50,359 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:27:50,359 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:27:50,359 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:27:50,359 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:27:50,360 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:27:50,360 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:27:50,360 - INFO - ============================================================
+2025-07-27 22:27:50,360 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:27:50,360 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_222750
+2025-07-27 22:27:50,360 - INFO - ============================================================
+2025-07-27 22:27:50,360 - INFO - ✅ Migración de base de datos completada
+2025-07-27 22:27:50,369 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 22:28:35,529 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:28:35,529 - INFO - ============================================================
+2025-07-27 22:28:35,530 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_222835
+2025-07-27 22:28:35,531 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:28:35,532 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:28:35,532 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:28:35,532 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:28:35,532 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:28:35,532 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:28:35,532 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:28:35,532 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,532 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,533 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,533 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,533 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,533 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,533 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:28:35,533 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:28:35,533 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:28:35,533 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:28:35,534 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:28:35,534 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:28:35,534 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:28:35,534 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:28:35,534 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:28:35,535 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:28:35,535 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:28:35,535 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:28:35,535 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:28:35,535 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:28:35,535 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:28:35,535 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:28:35,535 - INFO - ============================================================
+2025-07-27 22:28:35,535 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:28:35,535 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_222835
+2025-07-27 22:28:35,535 - INFO - ============================================================
+2025-07-27 22:28:35,558 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:28:35,558 - INFO - ============================================================
+2025-07-27 22:28:35,560 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_222835
+2025-07-27 22:28:35,560 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:28:35,561 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:28:35,561 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:28:35,561 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:28:35,561 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:28:35,561 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:28:35,562 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:28:35,562 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,562 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,562 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,563 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,563 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,563 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:28:35,563 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:28:35,563 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:28:35,564 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:28:35,564 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:28:35,564 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:28:35,564 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:28:35,564 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:28:35,565 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:28:35,565 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:28:35,565 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:28:35,565 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:28:35,565 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:28:35,565 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:28:35,565 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:28:35,565 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:28:35,565 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:28:35,566 - INFO - ============================================================
+2025-07-27 22:28:35,566 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:28:35,566 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_222835
+2025-07-27 22:28:35,566 - INFO - ============================================================
+2025-07-27 22:28:35,566 - INFO - ✅ Migración de base de datos completada
+2025-07-27 22:28:35,573 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 22:30:38,226 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:30:38,226 - INFO - ============================================================
+2025-07-27 22:30:38,227 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_223038
+2025-07-27 22:30:38,228 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:30:38,228 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:30:38,229 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:30:38,229 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:30:38,229 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:30:38,229 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:30:38,229 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:30:38,229 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,229 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,229 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,230 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,230 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,230 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,230 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:30:38,230 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:30:38,230 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:30:38,230 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:30:38,230 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:30:38,230 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:30:38,230 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:30:38,231 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:30:38,231 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:30:38,231 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:30:38,231 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:30:38,232 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:30:38,232 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:30:38,232 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:30:38,232 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:30:38,232 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:30:38,232 - INFO - ============================================================
+2025-07-27 22:30:38,232 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:30:38,232 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_223038
+2025-07-27 22:30:38,232 - INFO - ============================================================
+2025-07-27 22:30:38,255 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:30:38,255 - INFO - ============================================================
+2025-07-27 22:30:38,256 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_223038
+2025-07-27 22:30:38,256 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:30:38,257 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:30:38,257 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:30:38,257 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:30:38,257 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:30:38,258 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:30:38,258 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:30:38,258 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,258 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,259 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,259 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,259 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,259 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:30:38,260 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:30:38,260 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:30:38,260 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:30:38,260 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:30:38,260 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:30:38,261 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:30:38,261 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:30:38,261 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:30:38,261 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:30:38,262 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:30:38,262 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:30:38,262 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:30:38,262 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:30:38,262 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:30:38,262 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:30:38,262 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:30:38,262 - INFO - ============================================================
+2025-07-27 22:30:38,263 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:30:38,263 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_223038
+2025-07-27 22:30:38,263 - INFO - ============================================================
+2025-07-27 22:30:38,263 - INFO - ✅ Migración de base de datos completada
+2025-07-27 22:30:38,270 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 22:31:13,281 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:31:13,281 - INFO - ============================================================
+2025-07-27 22:31:13,282 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_223113
+2025-07-27 22:31:13,283 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:31:13,283 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:31:13,284 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:31:13,284 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:31:13,284 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:31:13,284 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:31:13,284 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:31:13,284 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,284 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,285 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,285 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,285 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,285 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,285 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:31:13,285 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:31:13,285 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:31:13,285 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:31:13,285 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:31:13,286 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:31:13,286 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:31:13,286 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:31:13,286 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:31:13,287 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:31:13,287 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:31:13,287 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:31:13,287 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:31:13,287 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:31:13,287 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:31:13,287 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:31:13,287 - INFO - ============================================================
+2025-07-27 22:31:13,287 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:31:13,287 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_223113
+2025-07-27 22:31:13,288 - INFO - ============================================================
+2025-07-27 22:31:13,310 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:31:13,310 - INFO - ============================================================
+2025-07-27 22:31:13,311 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_223113
+2025-07-27 22:31:13,312 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:31:13,313 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:31:13,313 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:31:13,313 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:31:13,313 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:31:13,314 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:31:13,314 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:31:13,314 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,315 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,315 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,315 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,316 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,316 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:31:13,316 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:31:13,316 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:31:13,317 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:31:13,317 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:31:13,317 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:31:13,318 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:31:13,318 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:31:13,318 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:31:13,319 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:31:13,319 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:31:13,320 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:31:13,320 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:31:13,320 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:31:13,320 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:31:13,320 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:31:13,320 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:31:13,320 - INFO - ============================================================
+2025-07-27 22:31:13,320 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:31:13,321 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_223113
+2025-07-27 22:31:13,321 - INFO - ============================================================
+2025-07-27 22:31:13,321 - INFO - ✅ Migración de base de datos completada
+2025-07-27 22:31:13,329 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-07-27 22:50:41,215 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:50:41,215 - INFO - ============================================================
+2025-07-27 22:50:41,216 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_225041
+2025-07-27 22:50:41,218 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:50:41,219 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:50:41,219 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:50:41,219 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:50:41,220 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:50:41,220 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:50:41,220 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:50:41,220 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,221 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,221 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,221 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,221 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,222 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,222 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:50:41,222 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:50:41,222 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:50:41,222 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:50:41,222 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:50:41,223 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:50:41,223 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:50:41,223 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:50:41,223 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:50:41,224 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:50:41,224 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:50:41,224 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:50:41,224 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:50:41,224 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:50:41,224 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:50:41,224 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:50:41,224 - INFO - ============================================================
+2025-07-27 22:50:41,225 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:50:41,225 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_225041
+2025-07-27 22:50:41,225 - INFO - ============================================================
+2025-07-27 22:50:41,247 - INFO - 🚀 Iniciando migración de base de datos...
+2025-07-27 22:50:41,247 - INFO - ============================================================
+2025-07-27 22:50:41,248 - INFO - ✅ Backup creado: emergency_system.db.backup_20250727_225041
+2025-07-27 22:50:41,248 - INFO - 🏗️ Creando tablas base si no existen...
+2025-07-27 22:50:41,249 - INFO - ✅ Todas las tablas creadas/verificadas correctamente
+2025-07-27 22:50:41,249 - INFO - 🔄 Ejecutando migración: personas
+2025-07-27 22:50:41,249 - INFO - 🔄 Migrando tabla 'personas'...
+2025-07-27 22:50:41,250 - INFO - ℹ️ Columna 'email' ya existe en tabla 'personas'
+2025-07-27 22:50:41,250 - INFO - 🔄 Ejecutando migración: usuarios
+2025-07-27 22:50:41,250 - INFO - 🔄 Migrando tabla 'usuarios'...
+2025-07-27 22:50:41,251 - INFO - ℹ️ Columna 'email' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,251 - INFO - ℹ️ Columna 'telefono' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,251 - INFO - ℹ️ Columna 'ultimo_login' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,252 - INFO - ℹ️ Columna 'llamados_atendidos' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,252 - INFO - ℹ️ Columna 'intentos_login' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,252 - INFO - ℹ️ Columna 'bloqueado_hasta' ya existe en tabla 'usuarios'
+2025-07-27 22:50:41,252 - INFO - 🔄 Ejecutando migración: configuración
+2025-07-27 22:50:41,252 - INFO - 🔄 Actualizando tabla 'configuracion'...
+2025-07-27 22:50:41,253 - INFO - ℹ️ Columna 'categoria' ya existe en tabla 'configuracion'
+2025-07-27 22:50:41,253 - INFO - ℹ️ Columna 'descripcion' ya existe en tabla 'configuracion'
+2025-07-27 22:50:41,253 - INFO - ℹ️ Columna 'fecha_modificacion' ya existe en tabla 'configuracion'
+2025-07-27 22:50:41,253 - INFO - 🔄 Ejecutando migración: configuraciones por defecto
+2025-07-27 22:50:41,254 - INFO - 🔄 Verificando configuraciones por defecto...
+2025-07-27 22:50:41,254 - INFO - ℹ️ Todas las configuraciones por defecto ya existen
+2025-07-27 22:50:41,255 - INFO - 🔍 Verificando integridad de la migración...
+2025-07-27 22:50:41,255 - INFO - ✅ Campo 'email' existe en tabla 'personas'
+2025-07-27 22:50:41,255 - INFO - ✅ Campo 'llamados_atendidos' existe en tabla 'usuarios'
+2025-07-27 22:50:41,256 - INFO - ✅ Campo 'intentos_login' existe en tabla 'usuarios'
+2025-07-27 22:50:41,256 - INFO - ✅ Campo 'bloqueado_hasta' existe en tabla 'usuarios'
+2025-07-27 22:50:41,256 - INFO - ✅ Todos los campos críticos en tabla 'usuarios'
+2025-07-27 22:50:41,256 - INFO - ✅ 14 configuraciones en base de datos
+2025-07-27 22:50:41,257 - INFO - ✅ 1 usuario(s) admin activo(s)
+2025-07-27 22:50:41,257 - INFO - ============================================================
+2025-07-27 22:50:41,257 - INFO - ✅ MIGRACIÓN COMPLETADA EXITOSAMENTE
+2025-07-27 22:50:41,257 - INFO - 📁 Backup disponible en: emergency_system.db.backup_20250727_225041
+2025-07-27 22:50:41,257 - INFO - ============================================================
+2025-07-27 22:50:41,258 - INFO - ✅ Migración de base de datos completada
+2025-07-27 22:50:41,266 - ERROR - ❌ Error inicializando base de datos: (sqlite3.OperationalError) no such column: usuarios.llamados_atendidos
+[SQL: SELECT usuarios.id AS usuarios_id, usuarios.username AS usuarios_username, usuarios.password_hash AS usuarios_password_hash, usuarios.nombre AS usuarios_nombre, usuarios.apellido AS usuarios_apellido, usuarios.email AS usuarios_email, usuarios.telefono AS usuarios_telefono, usuarios.rol AS usuarios_rol, usuarios.activo AS usuarios_activo, usuarios.fecha_creacion AS usuarios_fecha_creacion, usuarios.ultimo_login AS usuarios_ultimo_login, usuarios.llamados_atendidos AS usuarios_llamados_atendidos, usuarios.intentos_login AS usuarios_intentos_login, usuarios.bloqueado_hasta AS usuarios_bloqueado_hasta 
+FROM usuarios 
+WHERE usuarios.username = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('admin', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)

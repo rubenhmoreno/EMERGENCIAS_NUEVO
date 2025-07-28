@@ -1,61 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Sistema de Emergencias Villa Allende v2.0
-Script de Inicio Principal
+Sistema de Emergencias Villa Allende
+Script de Inicio y Verificación - Versión Corregida
 
-Mejoras en v2.0:
-- Verificación completa de dependencias
-- Migración automática de base de datos
-- Campo email agregado en personas
-- Verificación de integridad del sistema
-- Logging mejorado
-- Manejo de errores robusto
+Este script:
+1. Verifica dependencias
+2. Verifica estructura de archivos 
+3. Ejecuta migración de base de datos
+4. Inicializa la aplicación Flask
+5. Inicia el servidor
+
+Uso:
+    python run.py            # Inicia el servidor normalmente
+    python run.py --check    # Solo verifica el sistema sin iniciar
+    python run.py --migrate  # Solo ejecuta migración
+    python run.py --help     # Muestra ayuda
 """
 
 import os
 import sys
-import logging
-from datetime import datetime
 import traceback
-
-def setup_logging():
-    """Configurar sistema de logging"""
-    log_dir = 'logs'
-    os.makedirs(log_dir, exist_ok=True)
-    
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(os.path.join(log_dir, 'app.log')),
-            logging.StreamHandler()
-        ]
-    )
-    
-    return logging.getLogger(__name__)
+import argparse
+from datetime import datetime
 
 def print_banner():
     """Mostrar banner del sistema"""
     print("=" * 70)
     print("🚨 SISTEMA DE EMERGENCIAS VILLA ALLENDE v2.0")
-    print("   Gestión Integral de Llamados de Emergencia")
-    print("   Villa Allende, Córdoba - Argentina")
+    print("   Script de Inicio y Verificación")
     print("=" * 70)
-    print(f"📅 Iniciado: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
-    print(f"🐍 Python: {sys.version.split()[0]}")
-    print(f"📁 Directorio: {os.getcwd()}")
-    print("=" * 70)
+    print()
 
 def check_python_version():
     """Verificar versión de Python"""
-    if sys.version_info < (3, 8):
-        print("❌ ERROR: Se requiere Python 3.8 o superior")
-        print(f"   Versión actual: {sys.version}")
-        print("   Descargue Python desde: https://python.org")
+    print("🐍 Verificando Python...")
+    
+    version = sys.version_info
+    if version.major < 3 or (version.major == 3 and version.minor < 8):
+        print(f"❌ Python {version.major}.{version.minor} no es compatible")
+        print("💡 Solución: Instalar Python 3.8 o superior")
         return False
     
-    print(f"✅ Python {sys.version.split()[0]} - OK")
+    print(f"✅ Python {version.major}.{version.minor}.{version.micro}")
     return True
 
 def check_dependencies():
@@ -67,99 +54,159 @@ def check_dependencies():
         ('flask_sqlalchemy', 'Flask-SQLAlchemy'),
         ('flask_login', 'Flask-Login'),
         ('werkzeug', 'Werkzeug'),
-        ('requests', 'requests'),
         ('sqlite3', 'SQLite3 (built-in)')
     ]
     
-    missing_deps = []
+    optional_deps = [
+        ('requests', 'requests (para WhatsApp)'),
+        ('cryptography', 'cryptography (para SSL)')
+    ]
     
+    missing_critical = []
+    missing_optional = []
+    
+    # Verificar dependencias críticas
     for module, name in critical_deps:
         try:
             __import__(module)
             print(f"  ✅ {name}")
         except ImportError:
-            print(f"  ❌ {name} - FALTANTE")
-            missing_deps.append(name)
+            print(f"  ❌ {name} - CRÍTICO")
+            missing_critical.append(name)
     
-    if missing_deps:
-        print(f"\n❌ ERROR: Dependencias faltantes: {', '.join(missing_deps)}")
+    # Verificar dependencias opcionales
+    for module, name in optional_deps:
+        try:
+            __import__(module)
+            print(f"  ✅ {name}")
+        except ImportError:
+            print(f"  ⚠️ {name} - OPCIONAL")
+            missing_optional.append(name)
+    
+    if missing_critical:
+        print(f"\n❌ ERROR: Dependencias críticas faltantes: {', '.join(missing_critical)}")
         print("💡 Solución: pip install -r requirements.txt")
         return False
     
-    print("✅ Todas las dependencias están instaladas")
+    if missing_optional:
+        print(f"\n⚠️ AVISO: Dependencias opcionales faltantes: {', '.join(missing_optional)}")
+        print("   Algunas funcionalidades pueden no estar disponibles")
+    
+    print("✅ Todas las dependencias críticas están instaladas")
     return True
 
 def check_file_structure():
     """Verificar estructura de archivos"""
-    print("\n🗂️  Verificando estructura de archivos...")
+    print("\n🗂️ Verificando estructura de archivos...")
     
     required_files = [
         'app.py',
-        'models.py', 
         'migrate_database.py',
         'requirements.txt'
     ]
     
     required_dirs = [
         'templates',
-        'static',
-        'utils'
+        'static'
     ]
     
-    missing_items = []
+    optional_dirs = [
+        'utils',
+        'tools',
+        'logs',
+        'data',
+        'ssl',
+        'backups'
+    ]
     
-    # Verificar archivos
+    missing_files = []
+    missing_dirs = []
+    created_dirs = []
+    
+    # Verificar archivos requeridos
     for file in required_files:
         if os.path.exists(file):
             print(f"  ✅ {file}")
         else:
-            print(f"  ❌ {file} - FALTANTE")
-            missing_items.append(file)
+            print(f"  ❌ {file} - REQUERIDO")
+            missing_files.append(file)
     
-    # Verificar directorios
+    # Verificar directorios requeridos
     for directory in required_dirs:
         if os.path.exists(directory):
             print(f"  ✅ {directory}/")
         else:
-            print(f"  ❌ {directory}/ - FALTANTE")
-            missing_items.append(f"{directory}/")
+            print(f"  ❌ {directory}/ - REQUERIDO")
+            missing_dirs.append(directory)
     
-    if missing_items:
-        print(f"\n❌ ERROR: Archivos/directorios faltantes: {', '.join(missing_items)}")
+    # Crear directorios opcionales si no existen
+    for directory in optional_dirs:
+        if os.path.exists(directory):
+            print(f"  ✅ {directory}/")
+        else:
+            try:
+                os.makedirs(directory, exist_ok=True)
+                print(f"  ✅ {directory}/ - CREADO")
+                created_dirs.append(directory)
+            except Exception as e:
+                print(f"  ⚠️ {directory}/ - Error creando: {e}")
+    
+    if missing_files or missing_dirs:
+        print(f"\n❌ ERROR: Archivos/directorios críticos faltantes")
+        if missing_files:
+            print(f"   Archivos: {', '.join(missing_files)}")
+        if missing_dirs:
+            print(f"   Directorios: {', '.join(missing_dirs)}")
         print("💡 Solución: Restaurar desde backup o reinstalar")
         return False
     
-    print("✅ Estructura de archivos completa")
+    if created_dirs:
+        print(f"\n✅ Directorios creados: {', '.join(created_dirs)}")
+    
+    print("✅ Estructura de archivos verificada")
     return True
 
 def run_database_migration():
     """Ejecutar migración de base de datos"""
-    print("\n🗄️  Verificando base de datos...")
+    print("\n🗄️ Ejecutando migración de base de datos...")
     
     try:
-        # Ejecutar migración automática
+        # Verificar si existe el script de migración
+        if not os.path.exists('migrate_database.py'):
+            print("⚠️ Script de migración no encontrado, saltando...")
+            return True
+        
+        # Importar y ejecutar migración
         from migrate_database import DatabaseMigrator
         
         migrator = DatabaseMigrator()
         if migrator.run_migration():
-            print("✅ Base de datos migrada/verificada correctamente")
+            print("✅ Migración de base de datos completada")
             return True
         else:
             print("❌ Error en migración de base de datos")
             return False
             
-    except ImportError:
-        print("⚠️  Script de migración no disponible, intentando inicialización básica...")
+    except ImportError as e:
+        print(f"⚠️ No se pudo importar migrador: {e}")
+        print("   Continuando con inicialización básica...")
         return True
     except Exception as e:
         print(f"❌ Error ejecutando migración: {e}")
+        print(f"📋 Detalles del error:")
+        print(traceback.format_exc())
         return False
 
 def initialize_application():
     """Inicializar aplicación Flask"""
-    print("\n🚀 Inicializando aplicación...")
+    print("\n🚀 Inicializando aplicación Flask...")
     
     try:
+        # Verificar que app.py existe
+        if not os.path.exists('app.py'):
+            print("❌ Archivo app.py no encontrado")
+            return None
+        
         # Importar aplicación
         from app import app, init_database
         
@@ -167,7 +214,7 @@ def initialize_application():
         with app.app_context():
             init_database()
         
-        print("✅ Aplicación inicializada correctamente")
+        print("✅ Aplicación Flask inicializada correctamente")
         return app
         
     except Exception as e:
@@ -176,163 +223,139 @@ def initialize_application():
         print(traceback.format_exc())
         return None
 
-def start_application(app):
+def start_application(app, port=5000, debug=False):
     """Iniciar servidor Flask"""
-    print("\n🌐 Iniciando servidor web...")
-    print("=" * 70)
-    print("🔗 URL de acceso: http://localhost:5000")
-    print("👤 Usuario por defecto: admin")
-    print("🔑 Contraseña por defecto: 123456")
-    print("=" * 70)
-    print("⚠️  IMPORTANTE:")
-    print("   • Cambie la contraseña por defecto después del primer acceso")
-    print("   • Configure WhatsApp desde el panel de configuración")
-    print("   • Realice un backup inicial del sistema")
-    print("=" * 70)
+    print(f"\n🌐 Iniciando servidor en puerto {port}...")
+    print(f"🔗 Acceso web: http://localhost:{port}")
+    print("👤 Usuario inicial: admin / 123456")
+    print("\n⚠️ IMPORTANTE: Cambiar contraseña de admin después del primer login")
     print("🛑 Presione Ctrl+C para detener el servidor")
     print("=" * 70)
     
     try:
-        # Configurar desde config.ini si existe
-        host = '0.0.0.0'
-        port = 5000
-        debug = False
-        
-        if os.path.exists('config.ini'):
-            try:
-                import configparser
-                config = configparser.ConfigParser()
-                config.read('config.ini')
-                
-                host = config.get('SERVER', 'host', fallback='0.0.0.0')
-                port = config.getint('SERVER', 'port', fallback=5000)
-                debug = config.getboolean('SERVER', 'debug', fallback=False)
-                
-                print(f"📋 Configuración cargada desde config.ini")
-            except Exception as e:
-                print(f"⚠️  Error leyendo config.ini, usando valores por defecto: {e}")
-        
-        print(f"🌐 Servidor iniciando en {host}:{port}")
-        print(f"🔧 Modo debug: {'Activado' if debug else 'Desactivado'}")
-        
-        # Iniciar servidor
         app.run(
-            host=host,
-            port=port,
             debug=debug,
+            host='0.0.0.0',
+            port=port,
             threaded=True
         )
-        
     except KeyboardInterrupt:
-        print("\n\n🛑 Sistema detenido por el usuario")
-        print("👋 ¡Hasta la vista!")
-        
+        print("\n\n🛑 Servidor detenido por el usuario")
+        return True
     except Exception as e:
         print(f"\n❌ Error ejecutando servidor: {e}")
-        print("📋 Detalles del error:")
-        print(traceback.format_exc())
         return False
-    
-    return True
 
-def show_system_status():
-    """Mostrar estado del sistema después de las verificaciones"""
-    print("\n📊 ESTADO DEL SISTEMA:")
-    print("=" * 40)
+def run_diagnostics():
+    """Ejecutar diagnósticos completos"""
+    print("\n🔧 Ejecutando diagnósticos del sistema...")
     
-    # Verificar base de datos
-    if os.path.exists('emergency_system.db'):
-        size = os.path.getsize('emergency_system.db')
-        print(f"🗄️  Base de datos: OK ({size} bytes)")
-    else:
-        print("🗄️  Base de datos: Se creará automáticamente")
-    
-    # Verificar logs
-    if os.path.exists('logs'):
-        log_files = len([f for f in os.listdir('logs') if f.endswith('.log')])
-        print(f"📄 Logs: {log_files} archivo(s)")
-    else:
-        print("📄 Logs: Directorio se creará")
-    
-    # Verificar backups
-    if os.path.exists('backups'):
-        backup_files = len([f for f in os.listdir('backups') if f.endswith('.zip')])
-        print(f"💾 Backups: {backup_files} archivo(s)")
-    else:
-        print("💾 Backups: Directorio se creará")
-    
-    # Verificar SSL
-    if os.path.exists('ssl'):
-        ssl_files = len([f for f in os.listdir('ssl') if f.endswith(('.crt', '.key'))])
-        print(f"🔐 SSL: {ssl_files} archivo(s)")
-    else:
-        print("🔐 SSL: No configurado")
-    
-    print("=" * 40)
+    try:
+        if os.path.exists('tools/diagnostics.py'):
+            from tools.diagnostics import SystemDiagnostics
+            diagnostics = SystemDiagnostics()
+            results = diagnostics.run_full_diagnostics()
+            
+            print("\n📋 Resultados de diagnósticos:")
+            for check_name, result in results.items():
+                status = "✅" if result['status'] == 'PASS' else "❌"
+                print(f"  {status} {check_name}: {result['message']}")
+            
+            return True
+        else:
+            print("⚠️ Herramientas de diagnóstico no disponibles")
+            return True
+            
+    except Exception as e:
+        print(f"❌ Error ejecutando diagnósticos: {e}")
+        return False
 
 def main():
     """Función principal"""
-    # Configurar logging
-    logger = setup_logging()
+    # Configurar argumentos de línea de comandos
+    parser = argparse.ArgumentParser(description='Sistema de Emergencias Villa Allende')
+    parser.add_argument('--check', action='store_true', help='Solo verificar sistema sin iniciar')
+    parser.add_argument('--migrate', action='store_true', help='Solo ejecutar migración de BD')
+    parser.add_argument('--diagnostics', action='store_true', help='Ejecutar diagnósticos completos')
+    parser.add_argument('--port', type=int, default=5000, help='Puerto del servidor (default: 5000)')
+    parser.add_argument('--debug', action='store_true', help='Modo debug (NO usar en producción)')
     
-    try:
-        # Mostrar banner
-        print_banner()
-        
-        # Verificaciones pre-inicio
-        checks = [
-            ("Versión de Python", check_python_version),
-            ("Dependencias", check_dependencies), 
-            ("Estructura de archivos", check_file_structure),
-            ("Migración de base de datos", run_database_migration)
-        ]
-        
-        for check_name, check_func in checks:
-            if not check_func():
-                print(f"\n💔 FALLO EN VERIFICACIÓN: {check_name}")
-                print("🔧 Corrija los errores antes de continuar")
-                input("\n⏸️  Presione Enter para salir...")
-                sys.exit(1)
-        
-        # Mostrar estado del sistema
-        show_system_status()
-        
-        # Inicializar aplicación
-        app = initialize_application()
-        if not app:
-            print("\n💔 No se pudo inicializar la aplicación")
-            input("\n⏸️  Presione Enter para salir...")
-            sys.exit(1)
-        
-        # Mostrar información de novedades v2.0
-        print("\n🎉 NOVEDADES EN VERSIÓN 2.0:")
-        print("  ✅ Campo email agregado en tabla personas")
-        print("  ✅ Migración automática de base de datos")
-        print("  ✅ Sistema de backup mejorado")
-        print("  ✅ Herramientas de diagnóstico integradas")
-        print("  ✅ Instalador automático completo")
-        print("  ✅ Servicio Windows incluido")
-        
-        # Pausa antes de iniciar servidor
-        print(f"\n🚀 Sistema verificado y listo para iniciar")
-        print("⏳ Iniciando en 3 segundos...")
-        
-        import time
-        time.sleep(3)
-        
-        # Iniciar servidor
-        start_application(app)
-        
-    except KeyboardInterrupt:
-        print("\n\n🛑 Inicio cancelado por el usuario")
-        
-    except Exception as e:
-        logger.error(f"Error crítico en startup: {e}")
-        print(f"\n💥 ERROR CRÍTICO: {e}")
-        print("📋 Detalles completos en logs/app.log")
-        print(traceback.format_exc())
-        input("\n⏸️  Presione Enter para salir...")
+    args = parser.parse_args()
+    
+    # Mostrar banner
+    print_banner()
+    
+    # Verificaciones básicas
+    print("🔍 VERIFICACIONES BÁSICAS")
+    print("-" * 30)
+    
+    if not check_python_version():
         sys.exit(1)
+    
+    if not check_dependencies():
+        sys.exit(1)
+    
+    if not check_file_structure():
+        sys.exit(1)
+    
+    # Modo solo verificación
+    if args.check:
+        print("\n✅ Verificaciones completadas - Sistema OK")
+        if args.diagnostics:
+            run_diagnostics()
+        sys.exit(0)
+    
+    # Modo solo migración
+    if args.migrate:
+        print("\n🔄 EJECUTANDO SOLO MIGRACIÓN")
+        print("-" * 35)
+        if run_database_migration():
+            print("\n✅ Migración completada exitosamente")
+            sys.exit(0)
+        else:
+            print("\n❌ Error en migración")
+            sys.exit(1)
+    
+    # Modo diagnósticos
+    if args.diagnostics:
+        print("\n🔧 EJECUTANDO DIAGNÓSTICOS")
+        print("-" * 32)
+        run_diagnostics()
+        sys.exit(0)
+    
+    # Proceso completo de inicio
+    print("\n🔄 INICIALIZACIÓN COMPLETA")
+    print("-" * 30)
+    
+    # Migración de base de datos
+    if not run_database_migration():
+        print("\n❌ Error en migración - Abortando inicio")
+        sys.exit(1)
+    
+    # Inicialización de aplicación
+    app = initialize_application()
+    if not app:
+        print("\n❌ Error en inicialización - Abortando inicio")
+        sys.exit(1)
+    
+    # Inicio del servidor
+    print("\n🌐 INICIANDO SERVIDOR")
+    print("-" * 22)
+    
+    if not start_application(app, port=args.port, debug=args.debug):
+        print("\n❌ Error iniciando servidor")
+        sys.exit(1)
+    
+    print("\n✅ Sistema finalizado correctamente")
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n🛑 Proceso interrumpido por el usuario")
+        sys.exit(0)
+    except Exception as e:
+        print(f"\n💥 Error crítico: {e}")
+        print(f"📋 Detalles del error:")
+        print(traceback.format_exc())
+        sys.exit(1)
